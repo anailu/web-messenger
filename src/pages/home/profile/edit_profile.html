@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>edit profile</title>
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+    <link rel="stylesheet" href="profile.scss">
+    <link rel="stylesheet" href="../../../components/_button.scss">
+</head>
+<body>
+    <main class="main_container">
+        <nav class="back-link_container"> 
+            <a href="profile.html" class="back-link">
+                <img class="back-arrow" src="../../../../static/images/arrow_back.svg" alt="back">
+            </a>
+        </nav>
+    
+        <div class="profile-container">
+            <div class="avatar-container">
+                <label for="avatar">change photo</label>
+                <input type="file" id="avatar" name="avatar" value="{{avatar}}">
+            </div>
+
+            <div class="list-info edit-profile_container">
+                <label for="email">email</label>
+                <input type="email" id="email" name="email" value="{{email}}">
+
+                <label for="login">login</label>
+                <input type="text" id="login" name="login" value="{{login}}">
+        
+                <label for="first_name">name</label>
+                <input type="text" id="first_name" name="first_name" value="{{first_name}}">
+        
+                <label for="second_name">last name</label>
+                <input type="text" id="second_name" name="second_name" value="{{second_name}}">
+        
+                <label for="display_name">user</label>
+                <input type="text" id="display_name" name="display_name" value="{{display_name}}">
+        
+                <label for="phone">phone</label>
+                <input type="tel" id="phone" name="phone" value="{{phone}}">
+            </div>
+
+            <button type="button">save</button>
+        </div>
+    </main>
+</body>
+</html>
