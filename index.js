@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 });
 
-import Handlebars from 'handlebars';
+import Handlebars from 'https://cdn.skypack.dev/handlebars@4.7.7';
 
 const chatsData = ["chat 1", "chat 2"];
 
