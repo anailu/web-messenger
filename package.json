@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "node server.mjs",
     "dev": "vite",
     "build": "vite build --emptyOutDir",
     "preview": "vite preview"
@@ -28,5 +29,8 @@
     "path": "^0.12.7",
     "sass-middleware": "^0.0.3",
     "vite-plugin-pages": "^0.32.0"
+  },
+  "engines": {
+    "node": "20.11.0"
   }
 }
