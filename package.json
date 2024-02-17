@@ -5,17 +5,19 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --emptyOutDir",
     "preview": "vite preview"
   },
   "devDependencies": {
     "create-vite": "^5.2.0",
     "postcss": "^8.4.35",
     "postcss-preset-env": "^9.3.0",
+    "rollup-plugin-copy": "^3.5.0",
     "sass": "^1.70.0",
     "sass-loader": "^14.1.0",
     "vite": "^5.1.1",
     "vite-plugin-handlebars": "^2.0.0",
+    "vite-plugin-html": "^3.2.2",
     "vite-plugin-sass": "^0.1.0"
   },
   "dependencies": {
@@ -24,6 +26,7 @@
     "handlebars": "^4.7.8",
     "node-sass-middleware": "^1.1.0",
     "path": "^0.12.7",
-    "sass-middleware": "^0.0.3"
+    "sass-middleware": "^0.0.3",
+    "vite-plugin-pages": "^0.32.0"
   }
 }

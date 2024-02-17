@@ -15,9 +15,10 @@ const hbs = exphbs.create({});
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, '.dist')));
 
 app.use(express.static('./'));
+app.use(express.static('./dist'));
 app.use('/pages', express.static('src/pages'));
 app.use('/static', express.static('static'));
 
