@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --experimental-modules server.mjs",
     "dev": "vite",
-    "build": "vite build --emptyOutDir",
+    "build": "vite build",
     "preview": "vite preview"
   },
   "devDependencies": {
