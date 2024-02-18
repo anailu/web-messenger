@@ -5,10 +5,9 @@ import { resolve } from 'path';
 
 
 export default defineConfig({
-    //root: resolve(__dirname, 'src/pages/home/main'),
     build: {
       outDir: '.dist',
-      assetsDir: './static',
+      assetsDir: '.',
       rollupOptions: {
         input: {
           main: resolve(__dirname, 'src/pages/home/main/index.html'),
@@ -26,13 +25,4 @@ export default defineConfig({
       ViteSassPlugin(),
       handlebars(),
     ],
-
-    server: {
-      proxy: {
-        '/api': {
-          target: 'http://localhost:3000',
-          changeOrigin: true,
-        },
-      },
-    },
 });
