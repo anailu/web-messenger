@@ -1,3 +1,9 @@
 [build]
   base = "/"
   publish = ".dist"
+
+[[redirects]]
+from = "/*"
+to = "/src/pages/home/main/index.html"
+status = 200
+force = true
