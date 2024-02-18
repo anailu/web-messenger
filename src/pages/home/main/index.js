@@ -20,7 +20,7 @@ import Handlebars from 'https://cdn.skypack.dev/handlebars@4.7.7';
 const chatsData = ["chat 1", "chat 2"];
 
 (async () => {
-    const templateSource = await fetch("../../../../static/chatlist.hbs").then(response => response.text());
+    const templateSource = await fetch("/static/chatlist.hbs").then(response => response.text());
   
     const template = Handlebars.compile(templateSource);
   
