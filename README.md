@@ -1,11 +1,10 @@
 Макет: https://www.figma.com/file/eiGgEC5wD5Nr8VczIeZcaC/messenger?type=design&node-id=0%3A1&mode=design&t=OrCLTYyerP9YgWme-1
-
+Домен из netlify: gentle-seahorse-01b3d6.netlify.app
 
 Сверстанные страницы:
 Чаты: 
 https://gentle-seahorse-01b3d6.netlify.app/
 http://localhost:3000/src/pages/home/main/index.html
-
 
 Профиль: 
 http://localhost:3000/src/pages/home/profile/profile.html
