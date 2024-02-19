@@ -2,13 +2,34 @@
 
 
 Сверстанные страницы:
-Чаты: http://localhost:3000/src/pages/home/main/index.html
-Профиль: http://localhost:3000/src/pages/home/profile/profile.html
-Редактировать профиль: http://localhost:3000/src/pages/home/profile/edit_profile.html
-Редактировать пароль: http://localhost:3000/src/pages/home/profile/edit_password.html
-Ошибки: http://localhost:3000/src/pages/errors/error.html
-Логин: http://localhost:3000/src/pages/home/loginup/login.html
-Регистрация: http://localhost:3000/src/pages/home/loginup/registration.html
+Чаты: 
+https://gentle-seahorse-01b3d6.netlify.app/
+http://localhost:3000/src/pages/home/main/index.html
+
+
+Профиль: 
+http://localhost:3000/src/pages/home/profile/profile.html
+https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/profile
+
+Редактировать профиль: 
+http://localhost:3000/src/pages/home/profile/edit_profile.html
+https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/edit_profile
+
+Редактировать пароль: 
+http://localhost:3000/src/pages/home/profile/edit_password.html
+https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/edit_password
+
+Ошибки: 
+http://localhost:3000/src/pages/errors/error.html
+https://gentle-seahorse-01b3d6.netlify.app/src/pages/errors/error
+
+Логин: 
+http://localhost:3000/src/pages/home/loginup/login.html
+https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/loginup/login
+
+Регистрация: 
+http://localhost:3000/src/pages/home/loginup/registration.html
+https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/loginup/registration
 
 Messenger разрабатывается с использованием Hаndlebars, препроцессора Sass, для сборки проекта и раздачи статики используется Vite и Express.
 
