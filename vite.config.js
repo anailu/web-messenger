@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import ViteSassPlugin from "vite-plugin-sass";
-import handlebars from "vite-plugin-handlebars";
+import HandlebarsPlugin from "vite-plugin-handlebars";
 import { resolve } from 'path';
 
 
@@ -23,6 +23,8 @@ export default defineConfig({
 
     plugins: [
       ViteSassPlugin(),
-      handlebars(),
+      HandlebarsPlugin({
+        extension: ['.hbs', '.html'],
+      }),
     ],
 });
