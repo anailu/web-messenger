@@ -1,6 +1,6 @@
 import { defineConfig } from "vite";
 import ViteSassPlugin from "vite-plugin-sass";
-import HandlebarsPlugin from "vite-plugin-handlebars";
+import HandlebarsPlugin from "rollup-plugin-handlebars";
 import { resolve } from 'path';
 
 
@@ -18,13 +18,13 @@ export default defineConfig({
           login: resolve(__dirname, 'src/pages/home/loginup/login.html'),
           registration: resolve(__dirname, 'src/pages/home/loginup/registration.html'),
         },
+        plugins: [
+          HandlebarsPlugin(),
+      ],
       },
     },
 
     plugins: [
       ViteSassPlugin(),
-      HandlebarsPlugin({
-        extension: ['.hbs', '.html'],
-      }),
     ],
 });
