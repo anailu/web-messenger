@@ -31,3 +31,4 @@ const chatsData = ["chat 1", "chat 2"];
   
     document.getElementById("chatlist-container").innerHTML = renderedHTML;
   })();
+  

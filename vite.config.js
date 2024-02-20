@@ -6,7 +6,7 @@ import { resolve } from 'path';
 
 export default defineConfig({
     build: {
-      outDir: '.dist',
+      outDir: 'dist',
       assetsDir: './static',
       rollupOptions: {
         input: {
