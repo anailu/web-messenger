@@ -30,5 +30,4 @@ const chatsData = ["chat 1", "chat 2"];
     const renderedHTML = template({ chats: chatsData });
   
     document.getElementById("chatlist-container").innerHTML = renderedHTML;
-  })();
-  
+})();
