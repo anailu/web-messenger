@@ -18,32 +18,34 @@
         </nav>
     
         <div class="profile-container">
-            <div class="avatar-container">
-                <label for="avatar">change photo</label>
-                <input type="file" id="avatar" name="avatar" value="{{avatar}}">
-            </div>
-
-            <div class="list-info edit-profile_container">
-                <label for="email">email</label>
-                <input type="email" id="email" name="email" value="{{email}}">
-
-                <label for="login">login</label>
-                <input type="text" id="login" name="login" value="{{login}}">
+            <form id="profileForm">
+                <div class="avatar-container">
+                    <label for="avatar">change photo</label>
+                    <input type="file" id="avatar" name="avatar" value="{{avatar}}">
+                </div>
         
-                <label for="first_name">name</label>
-                <input type="text" id="first_name" name="first_name" value="{{first_name}}">
+                <div class="list-info edit-profile_container">
+                    <label for="email">email</label>
+                    <input type="email" id="email" name="email" value="{{email}}">
         
-                <label for="second_name">last name</label>
-                <input type="text" id="second_name" name="second_name" value="{{second_name}}">
+                    <label for="login">login</label>
+                    <input type="text" id="login" name="login" value="{{login}}">
         
-                <label for="display_name">user</label>
-                <input type="text" id="display_name" name="display_name" value="{{display_name}}">
+                    <label for="first_name">name</label>
+                    <input type="text" id="first_name" name="first_name" value="{{first_name}}">
         
-                <label for="phone">phone</label>
-                <input type="tel" id="phone" name="phone" value="{{phone}}">
-            </div>
-
-            <button type="button">save</button>
+                    <label for="second_name">last name</label>
+                    <input type="text" id="second_name" name="second_name" value="{{second_name}}">
+        
+                    <label for="display_name">user</label>
+                    <input type="text" id="display_name" name="display_name" value="{{display_name}}">
+        
+                    <label for="phone">phone</label>
+                    <input type="tel" id="phone" name="phone" value="{{phone}}">
+                </div>
+        
+                <button type="button">save</button>
+            </form>
         </div>
     </main>
 </body>

@@ -18,13 +18,11 @@ export default defineConfig({
           login: resolve(__dirname, 'src/pages/home/loginup/login.html'),
           registration: resolve(__dirname, 'src/pages/home/loginup/registration.html'),
         },
+        
         plugins: [
           HandlebarsPlugin(),
+          ViteSassPlugin(),
       ],
       },
     },
-
-    plugins: [
-      ViteSassPlugin(),
-    ],
 });
