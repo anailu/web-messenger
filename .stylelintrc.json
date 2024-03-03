@@ -1,9 +1,16 @@
 {
-    "extends": "stylelint-config-standard",
+    "extends": "stylelint-config-sass-guidelines",
     "rules": {
-      "color-hex-case": "lower"
+      "color-hex-case": "lower",
+      "at-rule-no-unknown": null
     },
     "ignoreFiles": [
-      "build/*"
+      "dist/*",
+      "src/components/*.sass",
+      "src/styles/*.sass",
+      "src/pages/errors/*.sass",
+      "src/pages/home/loginup/*.sass",
+      "src/pages/home/main/*.sass",
+      "src/pages/home/profile/*.sass"
     ]
 } 
