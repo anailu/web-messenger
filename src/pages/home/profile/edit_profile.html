@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
     <link rel="stylesheet" href="profile.sass">
     <link rel="stylesheet" href="../../../components/_button.sass">
+    <script type="module" src="formEditProfileHandler.ts"></script>
 </head>
 <body>
     <main class="main_container">
@@ -18,33 +19,30 @@
         </nav>
     
         <div class="profile-container">
-            <form id="profileForm">
+            <form id="editProfileForm">
                 <div class="avatar-container">
                     <label for="avatar">change photo</label>
-                    <input type="file" id="avatar" name="avatar" value="{{avatar}}">
+                    <input type="file" id="avatar" name="avatar">
                 </div>
         
                 <div class="list-info edit-profile_container">
                     <label for="email">email</label>
-                    <input type="email" id="email" name="email" value="{{email}}">
+                    <input type="email" id="email" name="email" value="">
         
                     <label for="login">login</label>
-                    <input type="text" id="login" name="login" value="{{login}}">
+                    <input type="text" id="login" name="login" value="">
         
                     <label for="first_name">name</label>
-                    <input type="text" id="first_name" name="first_name" value="{{first_name}}">
+                    <input type="text" id="first_name" name="first_name" value="">
         
                     <label for="second_name">last name</label>
-                    <input type="text" id="second_name" name="second_name" value="{{second_name}}">
-        
-                    <label for="display_name">user</label>
-                    <input type="text" id="display_name" name="display_name" value="{{display_name}}">
+                    <input type="text" id="second_name" name="second_name" value="">
         
                     <label for="phone">phone</label>
-                    <input type="tel" id="phone" name="phone" value="{{phone}}">
+                    <input type="tel" id="phone" name="phone" value="">
                 </div>
         
-                <button type="button">save</button>
+                <button id="saveProfileButton" type="submit">save</button>
             </form>
         </div>
     </main>

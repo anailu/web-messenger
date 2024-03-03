@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Messenger</title>
-    <link rel="stylesheet" href="index.sass">
-    <script type="module" src="index.js"></script>
+    <link rel="stylesheet" href="../../../styles/main.sass">
+    <script type="module" src="index.ts"></script>
     <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 </head>
 <body>
@@ -18,11 +18,9 @@
                       <img src="../../../../static/images/profile_icon.svg" class="profile_icon" alt="profile">
                     </a>
                   </div>
-                  <div class="input_search">
-                    <div class="input_container">
-                      <img src="../../../../static/images/search_icon.svg" class="search_icon" alt="search">
-                      <input type="text" placeholder="search">
-                    </div>
+                  <div class="input_search__container">
+                    <img src="../../../../static/images/search_icon.svg" class="search_icon" alt="search">
+                    <input class="input_search" type="text" placeholder="search">
                   </div>
                 </div>
                 <div class="column-left_chats-list">
@@ -32,7 +30,8 @@
                     </div>
                 </div>
             </section>
-            <section class="column-right">chat</section>
+            <section class="column-right" id="column-right">
+            </section>
         </div>
     </main>
 </body>
