@@ -16,7 +16,8 @@ const errorContainerElement = document.getElementById('error-container');
 if (errorTemplateElement && errorContainerElement) {
   const templateSource: string = errorTemplateElement.innerHTML;
 
-  const template: Handlebars.TemplateDelegate<ErrData> = Handlebars.compile<ErrData>(templateSource);
+  const template: Handlebars.TemplateDelegate<ErrData> =
+    Handlebars.compile<ErrData>(templateSource);
 
   errorContainerElement.textContent = template(errorData);
 } else {

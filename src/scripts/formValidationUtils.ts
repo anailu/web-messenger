@@ -1,11 +1,11 @@
 /**
- * валидация формы.
+ * Валидация формы.
  *
- * @param {string} fieldName - название поля формы
- * @param {string} fieldValue - значение поля формы для валидации
- * @param {function(value: string): boolean} validationFunction - функция валидации
- * @param {string} errorMessage - сообщение об ошибке, отображаемое при неудачной валидации
- * @return {boolean} true, если валидация успешна, иначе false
+ * @param {string} _fieldName - Название поля формы.
+ * @param {string} fieldValue - Значение поля формы для валидации.
+ * @param {function(value: string): boolean} validationFunction - Функция валидации.
+ * @param {string} errorMessage - Сообщение об ошибке, отображаемое при неудачной валидации.
+ * @return {boolean} True, если валидация успешна, иначе false.
  */
 export function validateForm(
     _fieldName: string,
@@ -21,10 +21,11 @@ export function validateForm(
 }
 
 /**
- * валидация на "blur"
- * @param {HTMLInputElement} input - HTML-элем. ввода, подвергающийся валидации при потере фокуса
- * @param {function(value: string): boolean} validationFunction - функция валидации
- * @param {string} errorMessage - сообщение об ошибке, отображаемое при неудачной валидации
+ * Валидация на "blur".
+ *
+ * @param {HTMLInputElement} input - HTML-элемент ввода, подвергающийся валидации при потере фокуса.
+ * @param {function(value: string): boolean} validationFunction - Функция валидации.
+ * @param {string} errorMessage - Сообщение об ошибке, отображаемое при неудачной валидации.
  */
 export function addBlurValidation(
     input: HTMLInputElement,
