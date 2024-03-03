@@ -29,4 +29,7 @@ eventBus.on('chatSelected', ({chatId}) => {
   }
 });
 
-document.getElementById('chatlist-container').appendChild(chatlistBlock.getElement());
+const chatlistContainer = document.getElementById('chatlist-container');
+if (chatlistContainer) {
+  chatlistContainer.appendChild(chatlistBlock.getElement());
+}

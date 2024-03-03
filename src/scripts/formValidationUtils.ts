@@ -8,7 +8,7 @@
  * @return {boolean} true, если валидация успешна, иначе false
  */
 export function validateForm(
-    fieldName: string,
+    _fieldName: string,
     fieldValue: string,
     validationFunction: (value: string) => boolean,
     errorMessage: string

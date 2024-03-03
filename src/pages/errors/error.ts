@@ -10,8 +10,15 @@ const errorData: ErrData = {
   errorDescription: 'not found',
 };
 
-const templateSource: string = document.getElementById('error-template').innerHTML;
+const errorTemplateElement = document.getElementById('error-template');
+const errorContainerElement = document.getElementById('error-container');
 
-const template: Handlebars.TemplateDelegate<ErrData> = Handlebars.compile<ErrData>(templateSource);
+if (errorTemplateElement && errorContainerElement) {
+  const templateSource: string = errorTemplateElement.innerHTML;
 
-document.getElementById('error-container').textContent = template(errorData);
+  const template: Handlebars.TemplateDelegate<ErrData> = Handlebars.compile<ErrData>(templateSource);
+
+  errorContainerElement.textContent = template(errorData);
+} else {
+  console.error('One or both elements not found');
+}
