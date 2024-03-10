@@ -1,30 +1,44 @@
+import EventBus from '../../../scripts/eventBus';
+
 /**
- * блочный элемент
+ * интерфейс для свойств блока
+ * @interface
  */
-export class Block {
-  private element: HTMLElement;
+interface Block {
+  _events: EventBus;
+  _addEvents(events: { [event: string]: Function }): void;
+  _removeEvents(): void;
+}
 
+/**
+ * базовый класс блока событий
+ * @class
+ */
+class Block {
   /**
-   * конструктор для нового Block
-   * @param {string} [tagName='div'] - имя HTML-тега элемента
+   * конструктор класса Block
+   * @constructor
    */
-  constructor(tagName: string = 'div') {
-    this.element = document.createElement(tagName);
+  constructor() {
+    this._events = new EventBus();
   }
 
   /**
-   * рендер контента внутри блока
-   * @param {string} content - контент для отображения
+   * метод для добавления обработчиков событий
+   * @param {Object} events - объект событий и их обработчиков
    */
-  render(content: string): void {
-    this.element.innerHTML = content;
+  _addEvents(events: { [event: string]: Function }): void {
+    for (const event in events) {
+      if (events.hasOwnProperty(event)) {
+        this._events.on(event, events[event].bind(this));
+      }
+    }
   }
-
   /**
-   * базовый HTMLElement блока
-   * @return {HTMLElement} базовый HTMLElement
+   * метод для удаления обработчиков событий
    */
-  getElement(): HTMLElement {
-    return this.element;
+  _removeEvents() {
   }
 }
+
+export default Block;

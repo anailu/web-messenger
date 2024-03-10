@@ -1,4 +1,4 @@
-import {Block} from './block';
+/* import {Block} from './block';
 import {EventBus} from './eventBus';
 import {renderChatList, ChatData} from './renderChatlist';
 import {renderColumn} from './renderDialog';
@@ -33,3 +33,42 @@ const chatlistContainer = document.getElementById('chatlist-container');
 if (chatlistContainer) {
   chatlistContainer.appendChild(chatlistBlock.getElement());
 }
+*/
+
+import EventBus from '../../../scripts/eventBus';
+import ChatListBlock from './renderChatlist';
+import DialogBlock from './renderDialog';
+// import DialogRenderer from './renderDialog';
+// import { eventBus } from './eventBus';
+
+export interface Chat {
+  chatId: string,
+  chatName: string;
+  data: string;
+  photo: string;
+  message: string;
+}
+const eventBus = new EventBus();
+
+export const chatListProps: { chats: Chat[], eventBus: EventBus } = {
+  chats: [
+    {chatId: '0', chatName: 'Pug Supernova', data: '11:40', photo: '', message: 'Hello!'},
+    {chatId: '1', chatName: 'dogs', data: '27.04', photo: '', message: 'Hi there!'},
+  ],
+  eventBus: eventBus,
+};
+
+const chatListBlock = new ChatListBlock(chatListProps);
+chatListBlock;
+
+eventBus.on('chatSelected', (selectedChat: Chat) => {
+  const columnRight = document.getElementById('column-right');
+  if (columnRight !== null) {
+    columnRight.innerHTML = '';
+
+    const dialogBlock = new DialogBlock({selectedChat, eventBus});
+    columnRight.appendChild(dialogBlock.element);
+  } else {
+    console.error('Элемент с id \'columnRight\' не найден');
+  }
+});

@@ -21,3 +21,24 @@ export const validateName = (inputValue: string): boolean => {
 export const validatePhone = (inputValue: string): boolean => {
   return /^\+?\d{10,15}$/.test(inputValue);
 };
+
+/**
+ * проверяет валидность сообщения
+ * @param {string} messageInputValue - текстовое значение сообщения
+ * @param {string} fileInputValue - значение файла сообщения
+ * @return {boolean} - возвращает true, если сообщение валидно, иначе возвращает false
+ */
+export function validateMessage(messageInputValue: string, fileInputValue: string): boolean {
+  const hasText = messageInputValue.trim() !== '';
+  const hasFile = fileInputValue.trim() !== '';
+
+  if (hasText && hasFile) {
+    return true;
+  } else if (!hasText && hasFile) {
+    return true;
+  } else if (hasText && !hasFile) {
+    return true;
+  } else {
+    return false;
+  }
+}

@@ -6,13 +6,12 @@
   <title>messanger</title>
   <link rel="stylesheet" href="modal_window.sass">
   <link rel="stylesheet" href="../../../components/_button.sass">
-  <script type="module" src="formLoginHandler.ts"></script>
 </head>
 
 <body>
   <main class="registration-container">
     <h1 class="modal_window__header">sign in</h2>
-    <div class="form_container">
+    <div class="form_container" id="form-login_container">
         <form id="login-form" action="" method="post">
             <div class="form-group">
                 <label for="login" class="input_header">login</label>
@@ -28,5 +27,6 @@
         </form>
     </div>
   </main>
+  <script type="module" src="formLoginHandler.ts"></script>
 </body>
 </html>
