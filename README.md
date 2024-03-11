@@ -2,35 +2,36 @@
 Домен из netlify: gentle-seahorse-01b3d6.netlify.app
 
 Сверстанные страницы:
-Чаты: 
+Чаты:
 https://gentle-seahorse-01b3d6.netlify.app/
 http://localhost:3000/src/pages/home/main/index.html
 
-Профиль: 
+Профиль:
 http://localhost:3000/src/pages/home/profile/profile.html
 https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/profile
 
-Редактировать профиль: 
+Редактировать профиль:
 http://localhost:3000/src/pages/home/profile/edit_profile.html
 https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/edit_profile
 
-Редактировать пароль: 
+Редактировать пароль:
 http://localhost:3000/src/pages/home/profile/edit_password.html
 https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/edit_password
 
-Ошибки: 
+Ошибки:
 http://localhost:3000/src/pages/errors/error.html
 https://gentle-seahorse-01b3d6.netlify.app/src/pages/errors/error
 
-Логин: 
+Логин:
 http://localhost:3000/src/pages/home/loginup/login.html
 https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/loginup/login
 
-Регистрация: 
+Регистрация:
 http://localhost:3000/src/pages/home/loginup/registration.html
 https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/loginup/registration
 
-Messenger разрабатывается с использованием Hаndlebars, препроцессора Sass, для сборки проекта и раздачи статики используется Vite и Express.
+Messenger разрабатывается с использованием JS, TS, Hаndlebars, препроцессора Sass, для сборки проекта и раздачи статики используется Vite и Express.
+Для линтинга кода используется ESLint с правилами ОТ Google.
 
 Мессенджер в процессе разработки, планируется реализовать привычную всем логику чатов с отправкой и получением текстовыйх сообщений и различных типов файлов.
 Зарегистрировавшись, пользователь будет иметь профиль с аватаркой, возможность редактировать свои данные и пароль.
