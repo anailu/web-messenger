@@ -4,7 +4,7 @@ import EventBus from '../../../scripts/eventBus';
 
 interface ChatListBlockProps {
   chats: Chat[];
-  eventBus: EventBus;
+  eventBus: EventBus<Chat>;
 }
 
 /**
@@ -13,7 +13,7 @@ interface ChatListBlockProps {
  */
 class ChatListBlock extends Block {
   private chats: Chat[];
-  private eventBus: EventBus;
+  private eventBus: EventBus<Chat>;
 
   /**
    * конструктор класса ChatListBlock
@@ -79,7 +79,7 @@ class ChatListBlock extends Block {
   }
 
   /**
-   * обработчик события клика на элементе '.chat_container'
+   * обработчик события клика на элементе '.chat_container'.
    * @param {Event} event - объект события
    * @private
    */
@@ -88,7 +88,8 @@ class ChatListBlock extends Block {
     const chatId = chatItem.getAttribute('data-chat-id');
 
     if (chatId !== null) {
-      this.eventBus.emit('chatSelected', parseInt(chatId, 10));
+      const chatObject: Chat = {chatId, chatName: '', data: '', photo: '', message: ''};
+      this.eventBus.emit('chatSelected', chatObject);
     }
   }
 }

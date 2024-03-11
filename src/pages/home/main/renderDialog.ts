@@ -6,8 +6,8 @@ import {Chat} from './index';
 
 interface DialogBlockProps {
   chatId?: string;
-  selectedChat?: Chat;
-  eventBus: eventBus;
+  selectedChat?: Chat | undefined;
+  eventBus: eventBus<Chat>;
 }
 /**
  * класс блока диалога
@@ -15,9 +15,9 @@ interface DialogBlockProps {
  */
 class DialogBlock extends Block {
   public chatId?: string;
-  private selectedChat?: Chat | undefined;
+  private selectedChat?: Chat;
   public element: HTMLElement;
-  private eventBus: eventBus;
+  private eventBus: eventBus<Chat>;
 
   /**
    * конструктор класса DialogBlock
@@ -54,7 +54,10 @@ class DialogBlock extends Block {
 
         sendMessage(event);
 
-        this.eventBus.emit('messageSent', {chatId: this.selectedChat?.chatId, message: 'dkmv'});
+        const chatIdToSend = this.selectedChat?.chatId;
+        if (chatIdToSend !== undefined) {
+          this.eventBus.emit('messageSent', {chatId: chatIdToSend} as Chat);
+        }
       });
     }
   }

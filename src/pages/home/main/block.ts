@@ -5,7 +5,7 @@ import EventBus from '../../../scripts/eventBus';
  * @interface
  */
 interface Block {
-  _events: EventBus;
+  _events: EventBus<unknown>;
   _addEvents(events: { [event: string]: Function }): void;
   _removeEvents(): void;
 }
