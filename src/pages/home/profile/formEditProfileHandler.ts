@@ -1,131 +1,172 @@
-import Block, {BlockProps} from '../../../scripts/blockForm';
-import {
-  validateEmail,
-  validateLogin,
-  validateName,
-  validatePhone,
-} from '../../../scripts/validationRules';
-import {sendDataToConsole} from '../../../scripts/saveData';
-import {validateForm, addBlurValidation} from '../../../scripts/formValidationUtils';
+import Block, {BlockProps} from '../../../scripts/block';
+import {getValidationFunction} from '../../../scripts/validationFunctions';
 
 /**
- * интерфейс для свойств блока формы пароля
- * @interface EditProfileFormBlockProps
- * @extends BlockProps
- * @property {string} formId - идентификатор формы
- * @property {string} saveButtonId - идентификатор кнопки сохранения
- */
-interface EditProfileFormBlockProps extends BlockProps {
-  formId: string;
-  saveButtonId: string;
-  onSaveButtonClick: (event: Event) => void;
-}
-
-/**
- * класс блока формы пароля
+ * класс блока формы редактирования профиля
  * @class EditProfileFormBlock
  * @extends {Block}
- * @param {EditProfileFormBlockProps} props - свойства блока формы пароля
+ * @param {EditProfileFormBlockProps} props - свойства блока формы
  */
-class EditProfileFormBlock extends Block {
+class EditProfileFormBlock extends Block<BlockProps> {
   /**
-   * конструктор класса EditProfileFormBlock
-   * @param {EditProfileFormBlockProps} props - cвойства блока формы
+   * конструктор класса ExtendedBlock
+   * @constructor
+   * @param {ExtendedBlockProps} props - объект свойств блока
    */
-  constructor(props: EditProfileFormBlockProps) {
-    const form = document.getElementById(props.formId) as HTMLFormElement | null;
-    const saveButton = document.getElementById(props.saveButtonId) as HTMLButtonElement | null;
-    super(form);
+  constructor(props: BlockProps) {
+    super('form', props);
+    this.addEventListeners();
+    this.dispatchComponentDidMount();
+  };
 
-    if (!form || !saveButton) {
-      console.error(`form or save button not found. form ID: ${props.formId}, 
-                     save button ID: ${props.saveButtonId}`);
+  /**
+   * обработчик клика по кнопке входа
+   * @param {Event} event - событие клика
+   */
+  handleClick(event: Event) {
+    event.preventDefault();
+
+    const formData: Record<string, string> = {};
+    const inputs = this.element.querySelectorAll('input');
+
+    inputs.forEach((input) => {
+      formData[input.name] = (input as HTMLInputElement).value;
+    });
+
+    const isFormEmpty = Object.values(formData).every((value) => value === '');
+
+    if (isFormEmpty) {
+      alert('enter data into the form fields');
       return;
     }
 
-    this._addEvents({
-      click: props.onSaveButtonClick,
+    const validationResults: Record<string, boolean> = {};
+    Object.entries(formData).forEach(([fieldName, fieldValue]) => {
+      const validationFunction = getValidationFunction(fieldName);
+      if (validationFunction) {
+        validationResults[fieldName] = validationFunction(fieldValue);
+      } else {
+        validationResults[fieldName] = true;
+      }
     });
 
-    const handleSubmit = (event: Event) => {
-      event.preventDefault();
+    const isValidForm = Object.values(validationResults).every((result) => result);
 
-      const formData: { [key: string]: string } = {};
-
-      const formElements = (this.element as HTMLFormElement | null)?.elements;
-
-      if (!formElements) {
-        console.error('form elements not found.');
-        return;
-      }
-
-      for (let i = 0; i < formElements.length; i++) {
-        const element = formElements[i] as HTMLInputElement;
-
-        if (element.tagName === 'INPUT' && ['text', 'email', 'tel'].includes(element.type)) {
-          const fieldName = element.name;
-          const fieldValue = element.value.trim();
-
-          if (!validateForm(fieldName, fieldValue, (value) =>
-            this.validate(fieldName, value), 'Invalid format')) {
-            return;
-          }
-
-          formData[fieldName] = fieldValue;
-        }
-      }
-
-      sendDataToConsole(formData);
-    };
-
-    saveButton.addEventListener('click', handleSubmit);
-
-    const formInputs = this.element?.querySelectorAll<HTMLInputElement>('input[name]');
-
-    if (formInputs) {
-      formInputs.forEach((input) => {
-        addBlurValidation(input, (value) =>
-          this.validate(input.name, value), `Invalid ${input.name} format`);
-      });
+    if (isValidForm) {
+      console.log('form data:', formData);
+    } else {
+      alert('form data is invalid\nplease check the fields');
     }
   }
 
   /**
-   * добавляет валидацию при потере фокуса у поля ввода
-   * @private
-   * @param {string} fieldName - имя поля ввода для валидации
-   * @param {string} fieldValue - значение поля ввода для валидации
-   * @return {boolean} - результат валидации true или false
+   * обработчик потери фокуса поля ввода
+   * @param {Event} event - событие потери фокуса
    */
-  private validate(fieldName: string, fieldValue: string): boolean {
-    switch (fieldName) {
-      case 'email':
-        return validateEmail(fieldValue);
-      case 'login':
-        return validateLogin(fieldValue);
-      case 'first_name':
-      case 'second_name':
-        return validateName(fieldValue);
-      case 'phone':
-        return validatePhone(fieldValue);
-      default:
-        return true;
+  handleBlur(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const inputName = inputElement.name;
+    const inputValue = inputElement.value;
+
+    const validationFunction = getValidationFunction(inputName);
+    if (validationFunction) {
+      const isValid = validationFunction(inputValue);
+      if (!isValid) {
+        alert(`invalid ${inputName} value`);
+      }
     }
+  }
+
+  /**
+   * метод для удаления блока
+   */
+  componentWillUnmount() {
+    super.componentWillUnmount();
+  }
+
+  /**
+   * метод для рендеринга HTML формы в строку
+   * @return {string} - HTML форма в виде строки
+   */
+  render(): string {
+    return `
+      <form id="editProfileForm">
+        <div class="avatar-container">
+            <label for="avatar"></label>
+            <input type="file" id="avatar" name="avatar">
+        </div>
+
+        <div class="list-info edit-profile_container">
+            <label for="email">email</label>
+            <input type="email" id="email" name="email" value="">
+
+            <label for="login">login</label>
+            <input type="text" id="login" name="login" value="">
+
+            <label for="first_name">name</label>
+            <input type="text" id="first_name" name="first_name" value="">
+
+            <label for="second_name">last name</label>
+            <input type="text" id="second_name" name="second_name" value="">
+
+            <label for="phone">phone</label>
+            <input type="tel" id="phone" name="phone" value="">
+        </div>
+
+        <button id="saveProfileButton" type="submit">save</button>
+      </form>
+    `;
+  }
+
+  /**
+   * метод для добавления слушателей событий
+   */
+  addEventListeners() {
+    this.element.querySelector('#saveProfileButton')
+        ?.addEventListener('click', this.handleClick.bind(this));
+    this.element.querySelector('#email')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#login')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#first_name')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#second_name')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#phone')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const onSaveButtonClick = function(event: Event) {
-    event.preventDefault();
-  };
+/**
+ * функция для рендеринга формы
+ * @param {string} query - селектор для поиска места вставки формы
+ * @param {Block} block - экземпляр блока формы
+ * @return {HTMLElement | undefined} - HTML элемент, куда была вставлена форма
+ */
+function renderForm(query: string, block: Block) {
+  const root = document.querySelector(query);
+  if (root) {
+    root.appendChild(block.getContent());
+    return root;
+  } else {
+    console.log(`element ${query} not found`);
+    return undefined;
+  }
+}
 
-  const editProfileFormBlock = new EditProfileFormBlock({
-    formId: 'editProfileForm',
-    saveButtonId: 'saveProfileButton',
-    onSaveButtonClick,
-    events: {
-      click: onSaveButtonClick,
+const editProfileFormBlock = new EditProfileFormBlock({
+  events: {
+    blur: (event: Event) => {
+      editProfileFormBlock.handleBlur(event);
     },
-  });
-  editProfileFormBlock;
+    submit: (event: Event) => {
+      editProfileFormBlock.handleClick(event);
+    },
+  },
+});
+
+renderForm('.profile-container', editProfileFormBlock);
+
+window.addEventListener('beforeunload', () => {
+  editProfileFormBlock.componentWillUnmount();
 });

@@ -28,17 +28,16 @@ export const validatePhone = (inputValue: string): boolean => {
  * @param {string} fileInputValue - значение файла сообщения
  * @return {boolean} - возвращает true, если сообщение валидно, иначе возвращает false
  */
-export function validateMessage(messageInputValue: string, fileInputValue: string): boolean {
+export function validateMessage(messageInputValue: string, fileInputValue: string): {
+  isValid: boolean,
+  errorMessage: string
+} {
   const hasText = messageInputValue.trim() !== '';
   const hasFile = fileInputValue.trim() !== '';
 
-  if (hasText && hasFile) {
-    return true;
-  } else if (!hasText && hasFile) {
-    return true;
-  } else if (hasText && !hasFile) {
-    return true;
+  if (hasText || hasFile) {
+    return {isValid: true, errorMessage: ''};
   } else {
-    return false;
+    return {isValid: false, errorMessage: 'write a message or attach a file'};
   }
 }

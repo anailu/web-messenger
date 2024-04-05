@@ -1,96 +1,151 @@
-import Block, {BlockProps} from '../../../scripts/blockForm';
-import {validateLogin, validatePassword} from '../../../scripts/validationRules';
-import {validateForm, addBlurValidation} from '../../../scripts/formValidationUtils';
-interface ExtendedBlockProps extends BlockProps {
-  additionalEvents: { [event: string]: (event: Event) => void };
-}
+import Block, {BlockProps} from '../../../scripts/block';
+import {getValidationFunction} from '../../../scripts/validationFunctions';
 
 /**
- * класс для расширенного блока
- * @class
+ * класс блока формы входа
+ * @class loginFormBlock
+ * @extends {Block}
+ * @param {loginFormBlock} props - свойства блока формы
  */
-class ExtendedBlock extends Block {
+class LoginFormBlock extends Block<BlockProps> {
   /**
-   * конструктор класса ExtendedBlock
+   * конструктор класса loginFormBlock
    * @constructor
    * @param {ExtendedBlockProps} props - объект свойств блока
-   * @param {string} elementId - идентификатор HTML-элемента
    */
-  constructor(props: ExtendedBlockProps, elementId: string) {
-    const element = document.getElementById(elementId) as HTMLElement | null;
-    super(element);
-    this.addEvents(props.additionalEvents);
+  constructor(props: BlockProps) {
+    super('form', props);
+    this.addEventListeners();
   }
 
   /**
-   * Добавляет обработчики событий к блоку
-   * @param {Object} events - объект, содержащий обработчики событий
-   * @private
+   * обработчик клика по кнопке входа
+   * @param {Event} event - событие клика
    */
-  private addEvents(events: { [event: string]: (event: Event) => void }): void {
-    if (!this.element) {
-      console.error('Element is undefined');
+  handleClick(event: Event) {
+    event.preventDefault();
+
+    const formData: Record<string, string> = {};
+    const inputs = this.element.querySelectorAll('input');
+
+    inputs.forEach((input) => {
+      formData[input.name] = (input as HTMLInputElement).value;
+    });
+
+    const isFormEmpty = Object.values(formData).every((value) => value === '');
+
+    if (isFormEmpty) {
+      alert('enter data into the form fields');
       return;
     }
 
-    for (const event in events) {
-      if (events.hasOwnProperty(event)) {
-        const handler = events[event];
-        this._eventHandlers[event] = handler;
-        this.element.addEventListener(event, handler);
+    const validationResults: Record<string, boolean> = {};
+    Object.entries(formData).forEach(([fieldName, fieldValue]) => {
+      const validationFunction = getValidationFunction(fieldName);
+      if (validationFunction) {
+        validationResults[fieldName] = validationFunction(fieldValue);
+      } else {
+        validationResults[fieldName] = true;
+      }
+    });
+
+    const isValidForm = Object.values(validationResults).every((result) => result);
+
+    if (isValidForm) {
+      console.log('form data:', formData);
+    } else {
+      alert('form data is invalid\nplease check the fields');
+    }
+  }
+
+  /**
+   * обработчик потери фокуса поля ввода
+   * @param {Event} event - событие потери фокуса
+   */
+  handleBlur(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const inputName = inputElement.name;
+    const inputValue = inputElement.value;
+
+    const validationFunction = getValidationFunction(inputName);
+    if (validationFunction) {
+      const isValid = validationFunction(inputValue);
+      if (!isValid) {
+        alert(`invalid ${inputName} value`);
       }
     }
   }
+
+  /**
+   * метод для удаления блока
+   */
+  componentWillUnmount() {
+    super.componentWillUnmount();
+  }
+
+  /**
+   * метод для рендеринга HTML формы в строку
+   * @return {string} - HTML форма в виде строки
+   */
+  render(): string {
+    return `
+    <form id="login-form" action="" method="post">
+      <div class="form-group">
+        <label for="login" class="input_header">login</label>
+        <input type="text" id="login" name="login" required>
+
+        <label for="password" class="input_header">password</label>
+        <input type="password" id="password" name="password" required>
+      </div>
+
+      <button id="signInButton" type="submit" class="submit">sign in</button>
+    </form> 
+    `;
+  }
+
+  /**
+   * метод для добавления слушателей событий
+   */
+  addEventListeners() {
+    this.element.querySelector('#signInButton')
+        ?.addEventListener('click', this.handleClick.bind(this));
+    this.element.querySelector('#login')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#password')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+  }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const fields = ['login', 'password'];
-  const formData: { [key: string]: string } = {};
-  const additionalEvents = {
-    submit: (event: Event) => {
-      event.preventDefault();
+/**
+ * функция для рендеринга формы
+ * @param {string} query - селектор для поиска места вставки формы
+ * @param {Block} block - экземпляр блока формы
+ * @return {HTMLElement | undefined} - HTML элемент, куда была вставлена форма
+ */
+function renderForm(query: string, block: Block) {
+  const root = document.querySelector(query);
+  if (root) {
+    root.appendChild(block.getContent());
+    return root;
+  } else {
+    console.log(`element ${query} not found`);
+    return undefined;
+  }
+}
 
-      fields.forEach((fieldName) => {
-        const input = document.getElementById(fieldName) as HTMLInputElement;
-        const fieldValue = input.value.trim();
-
-        if (!validateForm(fieldName, fieldValue, validateLogin, 'Invalid login format')) {
-          return;
-        }
-
-        formData[fieldName] = fieldValue;
-      });
-
-      console.log('Form Data:', formData);
-
-      fields.forEach((fieldName) => {
-        const input = document.getElementById(fieldName) as HTMLInputElement;
-        input.value = '';
-      });
+const loginForm = new LoginFormBlock({
+  events: {
+    blur: (event: Event) => {
+      loginForm.handleBlur(event);
     },
-  };
+    submit: (event: Event) => {
+      loginForm.handleClick(event);
+    },
+  },
+});
 
-  const loginBlock = new ExtendedBlock({events: {}, additionalEvents}, 'login-form');
-  loginBlock;
+renderForm('.form_container', loginForm);
 
-  const addValidation = (
-      fieldName: string,
-      validationFunction: (value: string) => boolean,
-      errorMessage: string
-  ) => {
-    const input = document.getElementById(fieldName) as HTMLInputElement;
-    addBlurValidation(input, validationFunction, errorMessage);
-  };
-
-
-  fields.forEach((fieldName) => {
-    switch (fieldName) {
-      case 'login':
-        addValidation(fieldName, validateLogin, 'Invalid login format');
-        break;
-      case 'password':
-        addValidation(fieldName, validatePassword, 'Invalid password format');
-        break;
-    }
-  });
+window.addEventListener('beforeunload', () => {
+  loginForm.componentWillUnmount();
 });

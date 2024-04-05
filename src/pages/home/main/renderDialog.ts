@@ -1,23 +1,24 @@
-import Block from './block';
-import eventBus from '../../../scripts/eventBus';
+import Block, {BlockProps} from '../../../scripts/block';
+import {EventBus} from '../../../scripts/eventBus';
 import {validateMessage} from '../../../scripts/validationRules';
-import {sendMessage} from './sendData';
 import {Chat} from './index';
+import {getFileData} from '../../../scripts/fileUtils';
 
-interface DialogBlockProps {
-  chatId?: string;
+interface DialogBlockProps extends BlockProps {
   selectedChat?: Chat | undefined;
-  eventBus: eventBus<Chat>;
+  eventBus: EventBus;
+  chats: Chat[];
 }
+
 /**
- * класс блока диалога
- * @class
+ * класс блока формы диалога
+ * @class DialogBlock
+ * @extends {Block}
+ * @param {DialogBlock} props - свойства блока формы
  */
-class DialogBlock extends Block {
-  public chatId?: string;
+class DialogBlock extends Block<DialogBlockProps> {
   private selectedChat?: Chat;
-  public element: HTMLElement;
-  private eventBus: eventBus<Chat>;
+  chats: Chat[];
 
   /**
    * конструктор класса DialogBlock
@@ -25,99 +26,118 @@ class DialogBlock extends Block {
    * @param {DialogBlockProps} props - объект свойств блока диалога
    */
   constructor(props: DialogBlockProps) {
-    super();
-    this.chatId = props.chatId;
+    super('div', props);
+    this.chats = props.chats;
     this.eventBus = props.eventBus;
-    this.selectedChat = props.selectedChat;
-    this.element = document.createElement('div');
-    this.render();
-    this.addEvents();
+    this.addEventListeners();
   }
 
   /**
-   * метод для добавления обработчиков событий
-   * @private
+   * добавляет слушатели событий
    */
-  private addEvents(): void {
-    const sendMessageButton = document.getElementById('sendMessage') as HTMLButtonElement | null;
-    const messageInput = document.getElementById('messageInput') as HTMLInputElement | null;
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement | null;
+  addEventListeners() {
+    this.eventBus.on('chatSelected', this.handleChatSelected.bind(this));
+  }
 
-    if (sendMessageButton && messageInput && fileInput) {
-      sendMessageButton.addEventListener('click', (event) => {
+  /**
+   * обрабатывает событие выбора чата
+   * @param {string} chatId - идентификатор выбранного чата
+   */
+  handleChatSelected(chatId: string) {
+    const selectedChat = this.chats.find((chat) => chat.chatId === chatId);
+    if (selectedChat) {
+      this.selectedChat = selectedChat;
+      const dialogContainer = document.getElementById('dialog-container');
+
+      if (dialogContainer) {
+        dialogContainer.innerHTML = this.render();
+        this.addSubmitListener();
+      } else {
+        console.error('dialog-container not found');
+      }
+    }
+  }
+
+  /**
+   * добавляет слушатель события отправки сообщения
+   */
+  addSubmitListener() {
+    const messageForm = document.getElementById('message');
+    if (messageForm) {
+      messageForm.addEventListener('submit', (event) => {
         event.preventDefault();
+        const messageInput = document.getElementById('messageInput') as HTMLInputElement;
+        const fileInput = document.getElementById('fileInput') as HTMLInputElement;
 
-        if (!validateMessage(messageInput.value, fileInput.value)) {
-          alert('write a message or attach a file');
-          return;
-        }
+        if (messageInput && fileInput) {
+          const {isValid, errorMessage} = validateMessage(
+              messageInput.value.trim(), fileInput.value.trim());
+          if (isValid) {
+            const messageObject = {
+              message: messageInput.value,
+              files: getFileData(fileInput.files),
+            };
 
-        sendMessage(event);
+            console.log('Message:', messageObject);
 
-        const chatIdToSend = this.selectedChat?.chatId;
-        if (chatIdToSend !== undefined) {
-          this.eventBus.emit('messageSent', {chatId: chatIdToSend} as Chat);
+            messageInput.value = '';
+            fileInput.value = '';
+          } else {
+            alert(errorMessage);
+          }
         }
       });
+    } else {
+      console.error('message form not found');
     }
   }
 
   /**
-   * метод для отрисовки блока диалога
-   * @public
+   * метод для удаления блока
    */
-  render(): void {
-    const columnRight = document.getElementById('column-right');
+  componentWillUnmount() {
+    super.componentWillUnmount();
+  }
 
-    if (!columnRight) {
-      console.error('Элемент с id \'column-right\' не найден');
-      return;
+  /**
+   * рендерит HTML содержимое блока формы диалога
+   * @return {string} HTML содержимое блока формы диалога
+   */
+  render(): string {
+    if (!this.selectedChat) {
+      return '';
     }
 
-    columnRight.innerHTML = '';
-
-    const personDiv = document.createElement('div');
-    personDiv.classList.add('chat-topbar_container', 'person');
-    personDiv.innerHTML = `
-      <div class='chat-topbar_container'>
+    return `
+      <div class='chat-topbar_container person'>
         <div class='person'>
           <img class='person-avatar' 
-               src='${this.selectedChat?.photo}' 
-               alt="chat's avatar">
-          <div class='person-name'>${this.selectedChat?.chatName}</div>
+              src='${this.selectedChat.photo}' 
+              alt="chat's avatar">
+          <div class='person-name'>${this.selectedChat.chatName}</div>
         </div>
       </div>
-    `;
-    columnRight.appendChild(personDiv);
-
-    const dialogContainer = document.createElement('div');
-    dialogContainer.classList.add('dialog_content');
-    dialogContainer.innerHTML = `
-      <div class='message_container'>
-        ${this.selectedChat?.message}
-        <span class='message-date'>${this.selectedChat?.data}</span>
+      <div class='dialog_content'>
+        <div class='message_container'>
+          ${this.selectedChat.message}
+          <span class='message-date'>${this.selectedChat.data}</span>
+        </div>
       </div>
+      <form id='message' class='chat_bottombar'>
+        <input type='file' id='fileInput' multiple>
+        <label for='fileInput' class='bottombar_attach-button'>
+          <img src='../static/images/attach_icon.svg' 
+              alt='attach' 
+              class='attach-icon'>
+        </label>
+        <input type='text' placeholder='write a message' class='chat_input' 
+          id='messageInput' autocomplete='off' name='message'>
+        <button type='submit' class='send-message' id='sendMessage'>
+          <img src='../../static/images/send-message.svg' 
+              alt='send' class='send-message_icon'>
+        </button>
+      </form>
     `;
-    columnRight.appendChild(dialogContainer);
-
-    const formContainer = document.createElement('form');
-    formContainer.id = 'message';
-    formContainer.classList.add('chat_bottombar');
-    formContainer.innerHTML = `
-      <input type='file' id='fileInput'>
-      <label for='fileInput' class='bottombar_attach-button'>
-        <img src='../static/images/attach_icon.svg' 
-             alt='attach' 
-             class='attach-icon'>
-      </label>
-      <input type='text' placeholder='write a message' class='chat_input' 
-        id='messageInput' autocomplete='off' name='message'>
-      <button type='submit' class='send-message' id='sendMessage'>
-        <img src='../static/images/send-message.svg' 
-        alt='send' class='send-message_icon'>
-      </button>
-    `;
-    columnRight.appendChild(formContainer);
   }
 }
 

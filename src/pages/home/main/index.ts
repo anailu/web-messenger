@@ -1,4 +1,4 @@
-import EventBus from '../../../scripts/eventBus';
+import {EventBus} from '../../../scripts/eventBus';
 import ChatListBlock from './renderChatlist';
 import DialogBlock from './renderDialog';
 
@@ -9,27 +9,49 @@ export interface Chat {
   photo: string;
   message: string;
 }
-const eventBus = new EventBus<Chat>();
 
-export const chatListProps: { chats: Chat[], eventBus: EventBus<Chat> } = {
-  chats: [
-    {chatId: '0', chatName: 'Pug Supernova', data: '11:40', photo: '', message: 'Hello!'},
-    {chatId: '1', chatName: 'dogs', data: '27.04', photo: '', message: 'Hi there!'},
-  ],
-  eventBus: eventBus,
-};
+export const chats = [
+  {chatId: '0', chatName: 'Pug Supernova', data: '11:40', photo: '', message: 'Hello!'},
+  {chatId: '1', chatName: 'dogs', data: '27.04', photo: '', message: 'Hi there!'},
+];
 
-const chatListBlock = new ChatListBlock(chatListProps);
-chatListBlock;
+const eventBus = new EventBus();
 
-eventBus.on('chatSelected', (selectedChat: Chat) => {
-  const columnRight = document.getElementById('column-right');
-  if (columnRight !== null) {
-    columnRight.innerHTML = '';
+const chatListBlock = new ChatListBlock({
+  chats: chats,
+  eventBus,
+  events: {
+    click: (chat) => {
+      console.log('Clicked chat info:', chat);
+    },
+  },
+});
 
-    const dialogBlock = new DialogBlock({selectedChat, eventBus});
-    columnRight.appendChild(dialogBlock.element);
-  } else {
-    console.error('Элемент не найден');
-  }
+const dialogBlock = new DialogBlock({
+  eventBus,
+  chats: chats,
+  events: {
+    click: () => {
+      console.log('chat');
+    },
+  },
+});
+
+const chatListContainer = document.getElementById('chatlist-container');
+const dialogContainer = document.getElementById('dialog-container');
+
+if (chatListContainer && dialogContainer) {
+  chatListContainer.innerHTML = chatListBlock.render();
+  dialogContainer.innerHTML = dialogBlock.render();
+  chatListBlock.addClickListener();
+} else {
+  console.error('chatlist-container not found');
+}
+
+window.addEventListener('beforeunload', () => {
+  chatListBlock.componentWillUnmount();
+});
+
+window.addEventListener('beforeunload', () => {
+  dialogBlock.componentWillUnmount();
 });

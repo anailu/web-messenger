@@ -1,148 +1,177 @@
-import Block, {BlockProps} from '../../../scripts/blockForm';
-import {
-  validateEmail,
-  validateLogin,
-  validateName,
-  validatePhone,
-  validatePassword,
-} from '../../../scripts/validationRules';
-import {addBlurValidation} from '../../../scripts/formValidationUtils';
-interface RegistrationBlockProps extends BlockProps {
-  formId: string;
-  fields: string[];
-  onSubmit: (formData: { [key: string]: string }) => void;
-}
-/**
- * класс блока регистрации
- * @class
- */
-class RegistrationBlock extends Block {
-  private formData: { [key: string]: string } = {};
-  /**
-   * конструктор класса RegistrationBlock
-   * @constructor
-   * @param {RegistrationBlockProps} props - объект свойств блока регистрации
-   */
-  constructor(props: RegistrationBlockProps) {
-    const form = document.getElementById(props.formId) as HTMLFormElement | null;
-    super(form);
+import Block, {BlockProps} from '../../../scripts/block';
+import {getValidationFunction} from '../../../scripts/validationFunctions';
 
-    if (!form) {
-      console.error(`form with ID '${props.formId}' not found.`);
+/**
+ * класс блока формы регистрации
+ * @class RegistrationFormBlock
+ * @extends {Block}
+ * @param {RegistrationFormBlock} props - свойства блока формы
+ */
+class RegistrationFormBlock extends Block<BlockProps> {
+  /**
+   * конструктор класса ExtendedBlock
+   * @constructor
+   * @param {ExtendedBlockProps} props - объект свойств блока
+   */
+  constructor(props: BlockProps) {
+    super('form', props);
+    this.addEventListeners();
+  }
+
+  /**
+   * обработчик клика по кнопке входа
+   * @param {Event} event - событие клика
+   */
+  handleClick(event: Event) {
+    event.preventDefault();
+
+    const formData: Record<string, string> = {};
+    const inputs = this.element.querySelectorAll('input');
+
+    inputs.forEach((input) => {
+      formData[input.name] = (input as HTMLInputElement).value;
+    });
+
+    const isFormEmpty = Object.values(formData).every((value) => value === '');
+
+    if (isFormEmpty) {
+      alert('enter data into the form fields');
       return;
     }
 
-    this.addValidationHandlers(props.fields);
-    form.addEventListener('submit', this.handleSubmit.bind(this, props.onSubmit));
-  }
-
-  /**
-   * добавляет обработчики валидации для полей формы
-   * @param {string[]} fields - массив имен полей формы
-   * @private
-   */
-  private addValidationHandlers(fields: string[]): void {
-    fields.forEach((fieldName) => {
-      const validationFunction = this.getValidationFunction(fieldName);
-      const errorMessage = this.getErrorMessage(fieldName);
-
-      const input = this.element?.querySelector(`[name="${fieldName}"]`) as HTMLInputElement | null;
-
-      if (!input) {
-        console.error(`input with name '${fieldName}' not found in the form.`);
-        return;
-      }
-
+    const validationResults: Record<string, boolean> = {};
+    Object.entries(formData).forEach(([fieldName, fieldValue]) => {
+      const validationFunction = getValidationFunction(fieldName);
       if (validationFunction) {
-        addBlurValidation(input, validationFunction, errorMessage);
+        validationResults[fieldName] = validationFunction(fieldValue);
       } else {
-        console.error(`Validation function for '${fieldName}' is undefined.`);
+        validationResults[fieldName] = true;
       }
     });
-  }
 
-  /**
-   * возвращает функцию валидации для указанного поля
-   * @param {string} fieldName - имя поля формы
-   * @return {string} - валидация или undefined
-   * @private
-   */
-  private getValidationFunction(fieldName: string): ((value: string) => boolean) | undefined {
-    switch (fieldName) {
-      case 'email':
-        return validateEmail;
-      case 'login':
-        return validateLogin;
-      case 'first_name':
-      case 'second_name':
-        return validateName;
-      case 'phone':
-        return validatePhone;
-      case 'password':
-        return validatePassword;
-      default:
-        return undefined;
+    const isValidForm = Object.values(validationResults).every((result) => result);
+
+    if (isValidForm) {
+      console.log('form data:', formData);
+    } else {
+      alert('form data is invalid\nplease check the fields');
     }
   }
 
   /**
-   * возвращает сообщение об ошибке для указанного поля
-   * @param {string} fieldName - имя поля формы
-   * @return {string} - сообщение об ошибке
-   * @private
+   * обработчик потери фокуса поля ввода
+   * @param {Event} event - событие потери фокуса
    */
-  private getErrorMessage(fieldName: string): string {
-    switch (fieldName) {
-      case 'email':
-        return 'Invalid email format';
-      case 'login':
-        return 'Invalid login format';
-      case 'first_name':
-      case 'second_name':
-        return `Invalid ${fieldName === 'first_name' ? 'name' : 'last name'} format`;
-      case 'phone':
-        return 'Invalid phone format';
-      case 'password':
-        return 'Invalid password format';
-      default:
-        return 'Invalid format';
+  handleBlur(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    const inputName = inputElement.name;
+    const inputValue = inputElement.value;
+
+    const validationFunction = getValidationFunction(inputName);
+    if (validationFunction) {
+      const isValid = validationFunction(inputValue);
+      if (!isValid) {
+        alert(`invalid ${inputName} value`);
+      }
     }
   }
 
   /**
-   * обработчик события отправки формы
-   * предотвращает стандартного поведения формы (перезагрузка страницы) и
-   * собирает данные формы
-   * @param {function} onSubmit - функция обратного вызова, принимает объект данных формы
-   * @param {Event} event - объект события отправки формы.
-   * @private
+   * метод для удаления блока
    */
-  private handleSubmit(onSubmit: (formData: {
-    [key: string]: string
-  }) => void, event: Event): void {
-    event.preventDefault();
+  componentWillUnmount() {
+    super.componentWillUnmount();
+  }
 
-    const form = event.target as HTMLFormElement;
-    const formData = new FormData(form);
+  /**
+   * метод для рендеринга HTML формы в строку
+   * @return {string} - HTML форма в виде строки
+   */
+  render(): string {
+    return `
+      <form id="registration-form" action="" method="post">
+        <div class="form-group">
+          <label for="email" class="input_header">email</label>
+          <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+          <label for="login" class="input_header">login</label>
+          <input type="text" id="login" name="login" required>
+        </div>
+        <div class="form-group">
+          <label for="first_name" class="input_header">name</label>
+          <input type="text" id="first_name" name="first_name" required>
+        </div>
+        <div class="form-group">
+          <label for="second_name" class="input_header">last name</label>
+          <input type="text" id="second_name" name="second_name" required>
+        </div>
+        <div class="form-group">
+          <label for="phone" class="input_header">phone</label>
+          <input type="tel" id="phone" name="phone" required>
+        </div>
+        <div class="form-group">
+          <label for="password" class="input_header">password</label>
+          <input type="password" id="password" name="password" required>
+        </div>
+          <div class="form-group">
+          <button id="registrationButton" type="submit" class="submit">sign up</button>
+        </div>
+        </form>
+    `;
+  }
 
-    formData.forEach((value, key) => {
-      this.formData[key] = value as string;
-    });
-
-    onSubmit(this.formData);
+  /**
+   * метод для добавления слушателей событий
+   */
+  addEventListeners() {
+    this.element.querySelector('#registrationButton')
+        ?.addEventListener('click', this.handleClick.bind(this));
+    this.element.querySelector('#email')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#login')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#first_name')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#second_name')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#phone')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#password')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const onSubmit = function(formData: { [key: string]: string }) {
-    console.log('Form Data:', formData);
-  };
+/**
+ * функция для рендеринга формы
+ * @param {string} query - селектор для поиска места вставки формы
+ * @param {Block} block - экземпляр блока формы
+ * @return {HTMLElement | undefined} - HTML элемент, куда была вставлена форма
+ */
+function renderForm(query: string, block: Block) {
+  const root = document.querySelector(query);
+  if (root) {
+    root.appendChild(block.getContent());
+    return root;
+  } else {
+    console.log(`element ${query} not found`);
+    return undefined;
+  }
+}
 
-  const registrationBlock = new RegistrationBlock({
-    formId: 'registration-form',
-    fields: ['email', 'login', 'first_name', 'second_name', 'phone', 'password'],
-    onSubmit,
-    events: {},
-  });
-  registrationBlock;
+const registrationFormBlock = new RegistrationFormBlock({
+  events: {
+    blur: (event: Event) => {
+      registrationFormBlock.handleBlur(event);
+    },
+    submit: (event: Event) => {
+      registrationFormBlock.handleClick(event);
+    },
+  },
+});
+
+renderForm('.form_container', registrationFormBlock);
+
+window.addEventListener('beforeunload', () => {
+  registrationFormBlock.componentWillUnmount();
 });

@@ -1,113 +1,127 @@
-import Block, {BlockProps} from '../../../scripts/blockForm';
+import Block, {BlockProps} from '../../../scripts/block';
 import {validatePassword} from '../../../scripts/validationRules';
-import {sendDataToConsole} from '../../../scripts/saveData';
-import {validateForm, addBlurValidation} from '../../../scripts/formValidationUtils';
 
 /**
- * интерфейс для свойств блока формы пароля
- * @interface PasswordFormBlockProps
- * @extends BlockProps
- * @property {string} formId - идентификатор формы
- * @property {string} saveButtonId - идентификатор кнопки сохранения
- */
-interface PasswordFormBlockProps extends BlockProps {
-  formId: string;
-  saveButtonId: string;
-  onSaveButtonClick: (event: Event) => void;
-}
-/**
- * класс блока формы пароля
- * @class PasswordFormBlock
+ * класс блока формы смены пароля
+ * @class PasswordChangeForm
  * @extends {Block}
- * @param {PasswordFormBlockProps} props - свойства блока формы пароля
+ * @param {PasswordChangeForm} props - свойства блока формы
  */
-class PasswordFormBlock extends Block {
+class PasswordChangeForm extends Block<BlockProps> {
   /**
-   * конструктор класса PasswordFormBlock
-   * @param {PasswordFormBlockProps} props - cвойства блока формы пароля
+   * конструктор класса ExtendedBlock
+   * @constructor
+   * @param {ExtendedBlockProps} props - объект свойств блока
    */
-  constructor(props: PasswordFormBlockProps) {
-    const form = document.getElementById(props.formId) as HTMLFormElement | null;
-    const saveButton = document.getElementById(props.saveButtonId) as HTMLButtonElement | null;
-    super(form);
-    if (!form || !saveButton) {
-      console.error(`form or save button not found. form ID: ${props.formId},
-                     save button ID: ${props.saveButtonId}`);
-      return;
-    }
-
-    this._addEvents({
-      submit: props.onSaveButtonClick,
-    });
-
-    const newPasswordInput = form.querySelector(
-        'input[name="newPassword"]'
-    ) as HTMLInputElement | null;
-    const oldPasswordInput = form.querySelector(
-        'input[name="oldPassword"]'
-    ) as HTMLInputElement | null;
-
-    if (!newPasswordInput || !oldPasswordInput) {
-      console.error('password not found in the form');
-      return;
-    }
-
-    this.addBlurValidation(newPasswordInput);
-    this.addBlurValidation(oldPasswordInput);
+  constructor(props: BlockProps) {
+    super('form', props);
+    this.addEventListeners();
   }
 
   /**
-   * добавляет валидацию при потере фокуса у поля ввода
-   * @private
-   * @param {HTMLInputElement} input - поле ввода для валидации
+   * обработчик клика по кнопке входа
+   * @param {Event} event - событие клика
    */
-  private addBlurValidation(input: HTMLInputElement): void {
-    addBlurValidation(input, validatePassword, 'invalid password format');
+  handleClick(event: Event) {
+    event.preventDefault();
+    const currentPasswordInput = this.element.querySelector('#currentPassword') as HTMLInputElement;
+    const newPasswordInput = this.element.querySelector('#newPassword') as HTMLInputElement;
+
+    if (!validatePassword(currentPasswordInput.value) ||
+        !validatePassword(newPasswordInput.value)) {
+      alert('enter valid password');
+      return;
+    }
+
+    const formData = {
+      currentPassword: currentPasswordInput.value,
+      newPassword: newPasswordInput.value,
+    };
+
+    console.log('Form data:', formData);
+  }
+
+  /**
+   * обработчик потери фокуса поля ввода
+   * @param {Event} event - событие потери фокуса
+   */
+  handleBlur(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.tagName === 'INPUT') {
+      if (!validatePassword(target.value)) {
+        alert('enter valid password');
+      }
+    }
+  }
+
+  /**
+   * метод для удаления блока
+   */
+  componentWillUnmount() {
+    super.componentWillUnmount();
+  }
+
+  /**
+   * метод для рендеринга HTML формы в строку
+   * @return {string} - HTML форма в виде строки
+   */
+  render(): string {
+    return `
+      <form name="passwordForm" id="passwordForm">
+        <div class="list-info edit-profile_container">
+          <label for="currentPassword">current password</label>
+          <input type="password" id="currentPassword" name="currentPassword">
+      
+          <label for="newPassword">new password</label>
+          <input type="password" id="newPassword" name="newPassword">
+        </div>
+        <button id="savePasswordButton" type="button"">save</button>
+      </form>
+    `;
+  }
+
+  /**
+   * метод для добавления слушателей событий
+   */
+  addEventListeners() {
+    this.element.querySelector('#savePasswordButton')
+        ?.addEventListener('click', this.handleClick.bind(this));
+    this.element.querySelector('#currentPassword')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
+    this.element.querySelector('#newPassword')
+        ?.addEventListener('blur', this.handleBlur.bind(this));
   }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
-  const onSaveButtonClick = function(event: Event) {
-    event.preventDefault();
-    const formData: { [key: string]: string } = {};
-    const form = document.getElementById('passwordForm') as HTMLFormElement;
+/**
+ * функция для рендеринга формы
+ * @param {string} query - селектор для поиска места вставки формы
+ * @param {Block} block - экземпляр блока формы
+ * @return {HTMLElement | undefined} - HTML элемент, куда была вставлена форма
+ */
+function renderForm(query: string, block: Block) {
+  const root = document.querySelector(query);
+  if (root) {
+    root.appendChild(block.getContent());
+    return root;
+  } else {
+    throw new Error(`element with selector ${query} not found`);
+  }
+}
 
-    if (!form) {
-      console.error('form element not found.');
-      return;
-    }
-
-    const inputElements = form.querySelectorAll('input') as NodeListOf<HTMLInputElement>;
-
-    if (!inputElements) {
-      console.error('input elements not found.');
-      return;
-    }
-
-    inputElements.forEach((element) => {
-      if (element.type !== 'submit') {
-        const fieldName = element.name;
-        const fieldValue = element.value.trim();
-
-        if (!validateForm(fieldName, fieldValue, validatePassword, 'invalid password format')) {
-          return;
-        }
-
-        formData[fieldName] = fieldValue;
-      }
-    });
-
-    sendDataToConsole(formData);
-    form.reset();
-  };
-
-  const passwordFormBlock = new PasswordFormBlock({
-    formId: 'passwordForm',
-    saveButtonId: 'savePasswordButton',
-    onSaveButtonClick,
-    events: {
-      submit: onSaveButtonClick,
+const passwordChangeForm = new PasswordChangeForm({
+  events: {
+    blur: (event: Event) => {
+      passwordChangeForm.handleBlur(event);
     },
-  });
-  passwordFormBlock;
+    submit: (event: Event) => {
+      passwordChangeForm.handleClick(event);
+    },
+  },
+});
+
+renderForm('.profile-container', passwordChangeForm);
+
+window.addEventListener('beforeunload', () => {
+  passwordChangeForm.componentWillUnmount();
 });
