@@ -115,13 +115,12 @@ abstract class Block<T extends BlockProps = BlockProps> {
     this.componentDidMount();
   }
 
-  /* eslint-disable */
   /**
    * метод componentDidMount блока
    * @param {BlockProps} [oldProps] - предыдущие свойства блока
    */
   protected componentDidMount(oldProps?: BlockProps) {
-    /* eslint no-unused-vars: 0 */
+    oldProps;
   }
 
   /**
@@ -129,19 +128,6 @@ abstract class Block<T extends BlockProps = BlockProps> {
    */
   protected dispatchComponentDidMount() {
     this.eventBus.emit(Block.EVENTS.FLOW_CDM);
-  }
-
-  /**
-   * вызывает метод componentDidUpdate блока
-   */
-  private _componentDidUpdate(oldProps: BlockProps, newProps: BlockProps) {
-  }
-
-  /**
-   * метод componentDidUpdate блока
-   */
-  protected componentDidUpdate(oldProps: BlockProps, newProps: BlockProps): boolean {
-    return true;
   }
 
   /**
@@ -187,6 +173,7 @@ abstract class Block<T extends BlockProps = BlockProps> {
     return this.element;
   }
 
+  /* eslint-disable */
   /**
    * создает прокси для свойств блока
    * @param {BlockProps} props - свойства блока
