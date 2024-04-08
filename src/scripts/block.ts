@@ -37,8 +37,6 @@ abstract class Block<T extends BlockProps = BlockProps> {
 
     this._props = this._makePropsProxy(props, (newProps) => {
       this._props = {...this._props, ...newProps};
-      this._removeEvents();
-      this._addEvents();
       eventBus.emit(Block.EVENTS.FLOW_RENDER);
     }) as T;
 
@@ -56,18 +54,35 @@ abstract class Block<T extends BlockProps = BlockProps> {
     eventBus.on(Block.EVENTS.INIT, this.init.bind(this));
     eventBus.on(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
     eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
-    this._addEvents();
   }
 
   /**
    * добавляет обработчики событий к элементам блока
    */
-  private _addEvents() {
-    const {events} = this._props;
+  protected _addEvents() {
+    if (this._props.events) {
+      Object.entries(this._props.events).forEach(([event, handler]) => {
+        this.element.addEventListener(event, handler);
+        console.log(this.element);
+        console.log(`Event listener added for event: ${event}`);
+      });
+    };
+  }
+
+  /**
+   * удаляет обработчики событий у элементов блока
+   */
+  private _removeEvents() {
+    /*const {events} = this._props;
     if (events) {
       Object.keys(events).forEach((eventName) => {
         const eventCallback = events[eventName] as EventCallback;
-        this.eventBus.on(eventName, eventCallback);
+        this.eventBus.off(eventName, eventCallback);
+      });
+    }*/
+    if (this._props.events) {
+      Object.entries(this._props.events).forEach(([event, handler]) => {
+        this.element.removeEventListener(event, handler);
       });
     }
   }
@@ -80,16 +95,10 @@ abstract class Block<T extends BlockProps = BlockProps> {
   }
 
   /**
-   * удаляет обработчики событий у элементов блока
+   * вызывает метод componentDidMount блока
    */
-  private _removeEvents() {
-    const {events} = this._props;
-    if (events) {
-      Object.keys(events).forEach((eventName) => {
-        const eventCallback = events[eventName] as EventCallback;
-        this.eventBus.off(eventName, eventCallback);
-      });
-    }
+  private _componentDidMount() {
+    this.componentDidMount();
   }
 
   /**
@@ -109,17 +118,11 @@ abstract class Block<T extends BlockProps = BlockProps> {
   }
 
   /**
-   * вызывает метод componentDidMount блока
-   */
-  private _componentDidMount() {
-    this.componentDidMount();
-  }
-
-  /**
    * метод componentDidMount блока
    * @param {BlockProps} [oldProps] - предыдущие свойства блока
    */
   protected componentDidMount(oldProps?: BlockProps) {
+    this._addEvents();
     oldProps;
   }
 
@@ -155,6 +158,7 @@ abstract class Block<T extends BlockProps = BlockProps> {
   private _render() {
     const block = this.render();
     this._element!.innerHTML = block;
+    this._addEvents();
   }
 
   /**

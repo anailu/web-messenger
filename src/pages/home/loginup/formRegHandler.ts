@@ -15,7 +15,6 @@ class RegistrationFormBlock extends Block<BlockProps> {
    */
   constructor(props: BlockProps) {
     super('form', props);
-    this.addEventListeners();
   }
 
   /**
@@ -64,6 +63,7 @@ class RegistrationFormBlock extends Block<BlockProps> {
    */
   handleBlur(event: Event) {
     const inputElement = event.target as HTMLInputElement;
+    console.log(`Blur event occurred on input with name: ${inputElement.name}`);
     const inputName = inputElement.name;
     const inputValue = inputElement.value;
 
@@ -92,7 +92,7 @@ class RegistrationFormBlock extends Block<BlockProps> {
       <form id="registration-form" action="" method="post">
         <div class="form-group">
           <label for="email" class="input_header">email</label>
-          <input type="email" id="email" name="email" required>
+          <input type="email" id="email" name="email" required">
         </div>
         <div class="form-group">
           <label for="login" class="input_header">login</label>
@@ -120,26 +120,6 @@ class RegistrationFormBlock extends Block<BlockProps> {
         </form>
     `;
   }
-
-  /**
-   * метод для добавления слушателей событий
-   */
-  addEventListeners() {
-    this.element.querySelector('#registrationButton')
-        ?.addEventListener('click', this.handleClick.bind(this));
-    this.element.querySelector('#email')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#login')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#first_name')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#second_name')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#phone')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#password')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-  }
 }
 
 /**
@@ -161,11 +141,11 @@ function renderForm(query: string, block: Block) {
 
 const registrationFormBlock = new RegistrationFormBlock({
   events: {
-    blur: (event: Event) => {
-      registrationFormBlock.handleBlur(event);
-    },
     submit: (event: Event) => {
       registrationFormBlock.handleClick(event);
+    },
+    blur: (event: Event) => {
+      registrationFormBlock.handleBlur(event);
     },
   },
 });
