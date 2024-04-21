@@ -59,30 +59,46 @@ abstract class Block<T extends BlockProps = BlockProps> {
   /**
    * добавляет обработчики событий к элементам блока
    */
-  protected _addEvents() {
+  private _addEvents() {
+    console.log('Adding events to chat items');
     if (this._props.events) {
       Object.entries(this._props.events).forEach(([event, handler]) => {
-        this.element.addEventListener(event, handler);
-        console.log(this.element);
-        console.log(`Event listener added for event: ${event}`);
+        if (event === 'click') {
+          const chatItems = this.element.querySelectorAll('li');
+          chatItems.forEach((chatItem) => {
+            chatItem.addEventListener(event, handler);
+            console.log(`Event listener added for '${event}'`);
+          });
+        } else if (event === 'blur') {
+          const inputs = this.element.querySelectorAll('input');
+          inputs.forEach((input) => {
+            input.addEventListener(event, handler);
+          });
+        } else if (event === 'beforeunload') {
+          window.addEventListener(event, handler);
+        } else {
+          this.element.addEventListener(event, handler);
+        }
       });
-    };
+    }
   }
 
   /**
    * удаляет обработчики событий у элементов блока
    */
   private _removeEvents() {
-    /*const {events} = this._props;
-    if (events) {
-      Object.keys(events).forEach((eventName) => {
-        const eventCallback = events[eventName] as EventCallback;
-        this.eventBus.off(eventName, eventCallback);
-      });
-    }*/
     if (this._props.events) {
       Object.entries(this._props.events).forEach(([event, handler]) => {
-        this.element.removeEventListener(event, handler);
+        if (event === 'blur') {
+          const inputs = this.element.querySelectorAll('input');
+          inputs.forEach((input) => {
+            input.removeEventListener(event, handler);
+          });
+        } else if (event === 'beforeunload') {
+          window.removeEventListener(event, handler);
+        } else {
+          this.element.removeEventListener(event, handler);
+        }
       });
     }
   }
@@ -99,6 +115,7 @@ abstract class Block<T extends BlockProps = BlockProps> {
    */
   private _componentDidMount() {
     this.componentDidMount();
+    // this._addEvents();
   }
 
   /**
@@ -122,7 +139,6 @@ abstract class Block<T extends BlockProps = BlockProps> {
    * @param {BlockProps} [oldProps] - предыдущие свойства блока
    */
   protected componentDidMount(oldProps?: BlockProps) {
-    this._addEvents();
     oldProps;
   }
 
@@ -137,7 +153,7 @@ abstract class Block<T extends BlockProps = BlockProps> {
    * устанавливает новые свойства блока
    * @param {BlockProps} nextProps - новые свойства
    */
-  setProps = (nextProps: BlockProps) => {
+  setProps = (nextProps: T) => {
     if (!nextProps) {
       return;
     }

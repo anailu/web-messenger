@@ -28,15 +28,7 @@ class DialogBlock extends Block<DialogBlockProps> {
   constructor(props: DialogBlockProps) {
     super('div', props);
     this.chats = props.chats;
-    this.eventBus = props.eventBus;
-    this.addEventListeners();
-  }
-
-  /**
-   * добавляет слушатели событий
-   */
-  addEventListeners() {
-    this.eventBus.on('chatSelected', this.handleChatSelected.bind(this));
+    this.selectedChat = props.selectedChat;
   }
 
   /**

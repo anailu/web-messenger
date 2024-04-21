@@ -52,6 +52,10 @@ class RegistrationFormBlock extends Block<BlockProps> {
 
     if (isValidForm) {
       console.log('form data:', formData);
+
+      inputs.forEach((input) => {
+        (input as HTMLInputElement).value = '';
+      });
     } else {
       alert('form data is invalid\nplease check the fields');
     }
@@ -117,7 +121,7 @@ class RegistrationFormBlock extends Block<BlockProps> {
           <div class="form-group">
           <button id="registrationButton" type="submit" class="submit">sign up</button>
         </div>
-        </form>
+      </form>
     `;
   }
 }
@@ -134,7 +138,6 @@ function renderForm(query: string, block: Block) {
     root.appendChild(block.getContent());
     return root;
   } else {
-    console.log(`element ${query} not found`);
     return undefined;
   }
 }
@@ -147,11 +150,10 @@ const registrationFormBlock = new RegistrationFormBlock({
     blur: (event: Event) => {
       registrationFormBlock.handleBlur(event);
     },
+    beforeunload: () => {
+      registrationFormBlock.componentWillUnmount();
+    },
   },
 });
 
 renderForm('.form_container', registrationFormBlock);
-
-window.addEventListener('beforeunload', () => {
-  registrationFormBlock.componentWillUnmount();
-});

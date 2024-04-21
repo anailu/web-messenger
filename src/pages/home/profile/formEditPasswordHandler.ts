@@ -15,7 +15,6 @@ class PasswordChangeForm extends Block<BlockProps> {
    */
   constructor(props: BlockProps) {
     super('form', props);
-    this.addEventListeners();
   }
 
   /**
@@ -39,6 +38,9 @@ class PasswordChangeForm extends Block<BlockProps> {
     };
 
     console.log('Form data:', formData);
+
+    currentPasswordInput.value = '';
+    newPasswordInput.value = '';
   }
 
   /**
@@ -75,21 +77,9 @@ class PasswordChangeForm extends Block<BlockProps> {
           <label for="newPassword">new password</label>
           <input type="password" id="newPassword" name="newPassword">
         </div>
-        <button id="savePasswordButton" type="button"">save</button>
+        <button id="savePasswordButton" type="submit"">save</button>
       </form>
     `;
-  }
-
-  /**
-   * метод для добавления слушателей событий
-   */
-  addEventListeners() {
-    this.element.querySelector('#savePasswordButton')
-        ?.addEventListener('click', this.handleClick.bind(this));
-    this.element.querySelector('#currentPassword')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#newPassword')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
   }
 }
 
@@ -117,11 +107,10 @@ const passwordChangeForm = new PasswordChangeForm({
     submit: (event: Event) => {
       passwordChangeForm.handleClick(event);
     },
+    beforeunload: () => {
+      passwordChangeForm.componentWillUnmount();
+    },
   },
 });
 
 renderForm('.profile-container', passwordChangeForm);
-
-window.addEventListener('beforeunload', () => {
-  passwordChangeForm.componentWillUnmount();
-});

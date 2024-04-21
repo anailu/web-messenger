@@ -15,8 +15,6 @@ class EditProfileFormBlock extends Block<BlockProps> {
    */
   constructor(props: BlockProps) {
     super('form', props);
-    this.addEventListeners();
-    this.dispatchComponentDidMount();
   };
 
   /**
@@ -54,6 +52,10 @@ class EditProfileFormBlock extends Block<BlockProps> {
 
     if (isValidForm) {
       console.log('form data:', formData);
+
+      inputs.forEach((input) => {
+        (input as HTMLInputElement).value = '';
+      });
     } else {
       alert('form data is invalid\nplease check the fields');
     }
@@ -117,24 +119,6 @@ class EditProfileFormBlock extends Block<BlockProps> {
       </form>
     `;
   }
-
-  /**
-   * метод для добавления слушателей событий
-   */
-  addEventListeners() {
-    this.element.querySelector('#saveProfileButton')
-        ?.addEventListener('click', this.handleClick.bind(this));
-    this.element.querySelector('#email')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#login')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#first_name')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#second_name')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-    this.element.querySelector('#phone')
-        ?.addEventListener('blur', this.handleBlur.bind(this));
-  }
 }
 
 /**
@@ -162,11 +146,10 @@ const editProfileFormBlock = new EditProfileFormBlock({
     submit: (event: Event) => {
       editProfileFormBlock.handleClick(event);
     },
+    beforeunload: () => {
+      editProfileFormBlock.componentWillUnmount();
+    },
   },
 });
 
 renderForm('.profile-container', editProfileFormBlock);
-
-window.addEventListener('beforeunload', () => {
-  editProfileFormBlock.componentWillUnmount();
-});

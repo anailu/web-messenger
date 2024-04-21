@@ -6,7 +6,8 @@ interface ChatListBlockProps extends BlockProps {
   chats: Chat[];
   eventBus: EventBus;
   events: {
-    click?: (chat: Chat) => void;
+    click?: (event: MouseEvent) => void;
+    beforeunload?: () => void;
   };
 }
 
@@ -26,9 +27,19 @@ class ChatListBlock extends Block<ChatListBlockProps> {
    * @param {ExtendedBlockProps} props - объект свойств блока
    */
   constructor(props: ChatListBlockProps) {
-    super('li', props);
+    super('ul', props);
     this.chats = props.chats;
     this.props = props;
+
+    this.props.eventBus.on('chatSelected', this.handleChatSelected.bind(this));
+  }
+
+  /**
+   * метод выводит выбранный чат в консоль
+   * @param {chatId} chatId - id чата
+   */
+  handleChatSelected(chatId: string) {
+    console.log(`Selected chat ID: ${chatId}`);
   }
 
   /**
@@ -56,31 +67,26 @@ class ChatListBlock extends Block<ChatListBlockProps> {
    * @return {string} - HTML форма в виде строки
    */
   render(): string {
-    if (!this.props || !this.props.chats) return '';
-    return this.props.chats.map((chat: Chat) => `
-      <li class='chat_container' data-chat-id='${chat.chatId}'>
-        <div class='avatar_container'>
-          <img src='${chat.photo}' alt="chat's avatar" class='avatar_image'>
-        </div>
-        <div class='dialog_container'>
-          <div class='dialog_title'>
-            ${chat.chatName}
-            <div class='chat_container__message-data'>${chat.data}</div>
-          </div>
-          <div class='dialog_content'>${chat.message}</div>
-        </div>
-      </li>
-    `).join('');
-  }
+    if (!this.props) return '';
 
-  /**
-   * метод для добавления слушателей событий
-   */
-  addClickListener() {
-    const chatContainers = document.querySelectorAll('li.chat_container');
-    chatContainers.forEach((chatContainer) =>{
-      chatContainer.addEventListener('click', this.handleChatClick.bind(this));
-    });
+    return this.chats
+        .map(
+            (chat) => `
+        <li class='chat_container' data-chat-id='${chat.chatId}'>
+          <div class='avatar_container'>
+            <img src='${chat.photo}' alt="chat's avatar" class='avatar_image'>
+          </div>
+          <div class='dialog_container'>
+            <div class='dialog_title'>
+              ${chat.chatName}
+              <div class='chat_container__message-data'>${chat.data}</div>
+            </div>
+            <div class='dialog_content'>${chat.message}</div>
+          </div>
+        </li>
+      `
+        )
+        .join('');
   }
 }
 
