@@ -1,16 +1,16 @@
 import { defineConfig } from "vite";
 import ViteSassPlugin from "vite-plugin-sass";
-import HandlebarsPlugin from "rollup-plugin-handlebars";
+import handlebars from "vite-plugin-handlebars";
 import { resolve } from 'path';
 
 
 export default defineConfig({
+    root: resolve(__dirname, 'src'),
     build: {
-      outDir: 'dist',
-      assetsDir: './static',
+      outDir: '../dist',
       rollupOptions: {
         input: {
-          main: resolve(__dirname, 'src/pages/home/main/index.html'),
+          index: resolve(__dirname, 'src/index.html'),
           profile: resolve(__dirname, 'src/pages/home/profile/profile.html'),
           error: resolve(__dirname, 'src/pages/errors/error.html'),
           editProfile: resolve(__dirname, 'src/pages/home/profile/edit_profile.html'),
@@ -18,11 +18,10 @@ export default defineConfig({
           login: resolve(__dirname, 'src/pages/home/loginup/login.html'),
           registration: resolve(__dirname, 'src/pages/home/loginup/registration.html'),
         },
-        
-        plugins: [
-          HandlebarsPlugin(),
-          ViteSassPlugin(),
-      ],
+        },
       },
-    },
+    plugins: [
+      handlebars(),
+      ViteSassPlugin(),
+    ],
 });

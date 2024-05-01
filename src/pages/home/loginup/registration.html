@@ -1,46 +1,18 @@
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>messanger</title>
-<link rel="stylesheet" href="modal_window.css">
-<link rel="stylesheet" href="../../../components/_button.sass">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>messanger</title>
+    <link rel="stylesheet" href="modal_window.sass">
+    <link rel="stylesheet" href="../../../components/_button.sass">
 </head>
 
 <body>
     <main class="registration-container">
         <h1 class="modal_window__header">sign up</h2>
         <div class="form_container">
-            <form action="" method="post">
-                <div class="form-group">
-                    <label for="email" class="input_header">email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label for="login" class="input_header">login</label>
-                    <input type="text" id="login" name="login" required>
-                </div>
-                <div class="form-group">
-                    <label for="first_name" class="input_header">name</label>
-                    <input type="text" id="first_name" name="first_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="second_name" class="input_header">last name</label>
-                    <input type="text" id="second_name" name="second_name" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone" class="input_header">phone</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                <div class="form-group">
-                    <label for="password" class="input_header">password</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                    <div class="form-group">
-                    <button type="submit" class="submit">sign up</button>
-                </div>
-            </form>
         </div>
     </main>
+    <script type="module" src="formRegHandler.ts"></script>
 </body>
 </html>
