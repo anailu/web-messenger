@@ -72,19 +72,19 @@ class ChatListBlock extends Block<ChatListBlockProps> {
     return this.chats
         .map(
             (chat) => `
-        <li class='chat_container' data-chat-id='${chat.chatId}'>
-          <div class='avatar_container'>
-            <img src='${chat.photo}' alt="chat's avatar" class='avatar_image'>
-          </div>
-          <div class='dialog_container'>
-            <div class='dialog_title'>
-              ${chat.chatName}
-              <div class='chat_container__message-data'>${chat.data}</div>
-            </div>
-            <div class='dialog_content'>${chat.message}</div>
-          </div>
-        </li>
-      `
+            <li class='chat_container' data-chat-id='${chat.chatId}'>
+              <div class='avatar_container'>
+                <img src='${chat.photo}' alt="chat's avatar" class='avatar_image'>
+              </div>
+              <div class='dialog_container'>
+                <div class='dialog_title'>
+                  ${chat.chatName}
+                  <div class='chat_container__message-data'>${chat.data}</div>
+                </div>
+                <div class='dialog_content'>${chat.message}</div>
+              </div>
+            </li>
+            `
         )
         .join('');
   }

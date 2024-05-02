@@ -1,8 +1,10 @@
 import Block, {BlockProps} from '../../../scripts/block';
 import {EventBus} from '../../../scripts/eventBus';
-import {validateMessage} from '../../../scripts/validationRules';
+import {validateMessage} from '../../../scripts/validationFunctions';
 import {Chat} from './index';
 import {getFileData} from '../../../scripts/fileUtils';
+import attachIcon from '../../../static/images/attach_icon.svg';
+import sendMessageIcon from '../../../static/images/send-message.svg';
 
 interface DialogBlockProps extends BlockProps {
   selectedChat?: Chat | undefined;
@@ -29,6 +31,8 @@ class DialogBlock extends Block<DialogBlockProps> {
     super('div', props);
     this.chats = props.chats;
     this.selectedChat = props.selectedChat;
+
+    this.element.classList.add('dialog-block_container');
   }
 
   /**
@@ -118,15 +122,12 @@ class DialogBlock extends Block<DialogBlockProps> {
       <form id='message' class='chat_bottombar'>
         <input type='file' id='fileInput' multiple>
         <label for='fileInput' class='bottombar_attach-button'>
-          <img src='../static/images/attach_icon.svg' 
-              alt='attach' 
-              class='attach-icon'>
+        <img src="${attachIcon}" alt="attach image" class="attach-icon">
         </label>
         <input type='text' placeholder='write a message' class='chat_input' 
           id='messageInput' autocomplete='off' name='message'>
         <button type='submit' class='send-message' id='sendMessage'>
-          <img src='../../static/images/send-message.svg' 
-              alt='send' class='send-message_icon'>
+          <img src="${sendMessageIcon}" alt="send image" class="send-message_icon">
         </button>
       </form>
     `;

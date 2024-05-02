@@ -60,7 +60,6 @@ abstract class Block<T extends BlockProps = BlockProps> {
    * добавляет обработчики событий к элементам блока
    */
   private _addEvents() {
-    console.log('Adding events to chat items');
     if (this._props.events) {
       Object.entries(this._props.events).forEach(([event, handler]) => {
         if (event === 'click') {

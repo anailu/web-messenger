@@ -1,38 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messenger</title>
-    <link rel="stylesheet" href="styles/main.sass">
-    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messenger</title>
+  <link rel="stylesheet" href="styles/main.sass">
+  <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
 </head>
 <body>
-    <main class="whole_page">
-        <div class="chat-container" id="chatContainer">
-            <section class="column-left">
-                <div class="column-left_header">
-                  <div class="profile_icon_link">
-                    <a href="pages/home/profile/profile.html" class="profile_link">
-                      <img src="static/images/profile_icon.svg" class="profile_icon" alt="profile">
-                    </a>
-                  </div>
-                  <div class="input_search__container">
-                    <img src="static/images/search_icon.svg" class="search_icon" alt="search">
-                    <input class="input_search" type="text" placeholder="search">
-                  </div>
-                </div>
-                <div class="column-left_chats-list">
-                    <div class="column-left__chat_container">
-                        <ul class="chatlist" class="chatlist-container" id="chatlist-container">
-                        </ul>
-                    </div>
-                </div>
-            </section>
-            <section class="column-right" id="dialog-container">
-            </section>
+  <main class="whole_page">
+    <div class="chat-container" id="chatContainer">
+      <section class="column-left">
+        <div class="column-left_header">
+          <div class="profile_icon_link">
+            <a href="pages/home/profile/profile.html" class="profile_link">
+              <img src="static/images/profile_icon.svg" class="profile_icon" alt="profile">
+            </a>
+          </div>
+          <div class="input_search__container">
+            <img src="static/images/search_icon.svg" class="search_icon" alt="search">
+            <input class="input_search" type="text" placeholder="search">
+          </div>
         </div>
-    </main>
-    <script type="module" src="pages/home/main/index.ts"></script>
+        <div class="column-left_chats-list">
+            <div class="column-left__chat_container">
+              <ul class="chatlist" class="chatlist-container" id="chatlist-container">
+              </ul>
+            </div>
+        </div>
+      </section>
+      <section class="column-right" id="dialog-container">
+      </section>
+    </div>
+  </main>
+  <script type="module" src="pages/home/main/index.ts"></script>
 </body>
 </html>

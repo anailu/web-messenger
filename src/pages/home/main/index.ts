@@ -43,17 +43,6 @@ chatListBlock.setProps({
 
 renderChatlist('#chatlist-container', chatListBlock);
 
-/* const dialogBlock = new DialogBlock({
-  chats: chats,
-  eventBus: eventBus,
-  events: {
-    click: (event: MouseEvent) => {
-      console.log('chat');
-    },
-  },
-
-});*/
-
 /**
  * рендерит список чатов в указанный DOM-элемент
  * @param {string} query - селектор DOM-элемента, в который будет добавлен список чатов
@@ -81,6 +70,7 @@ function renderChatlist(query: string, block: ChatListBlock) {
 function renderDialog(query: string, block: DialogBlock) {
   const root = document.querySelector(query);
   if (root) {
+    root.innerHTML = '';
     root.appendChild(block.getContent());
     return root;
   } else {
