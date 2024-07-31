@@ -27,6 +27,7 @@ export type UserDTO = {
   avatar: string;
   phone: string;
   email: string;
+  [key: string]: any;
 };
 
 export type CreateUser = Omit<UserDTO, 'avatar' | 'display_name' | 'id'> & {

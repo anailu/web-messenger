@@ -25,7 +25,7 @@ class ProfileButton extends Block {
       ...props,
       events: {
         click: () => {
-          loadProfile({});
+          loadProfile();
         },
       },
     });

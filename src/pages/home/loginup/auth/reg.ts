@@ -9,11 +9,13 @@ export const register = async (model: any) => {
     console.log('Registration response:', response);
 
     const userData = await authApi.me();
+
     console.log('User Data:', userData);
 
     window.router.go('/messenger');
   } catch (error) {
     console.error('Registration failed:', error);
+
     window.store.set({registerError: 'some error'});
   } finally {
     window.store.set({isLoading: false});

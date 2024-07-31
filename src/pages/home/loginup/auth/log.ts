@@ -1,4 +1,4 @@
-import {LoginRequestData} from '../../../../api/type';
+import {LoginRequestData, UserDTO, APIError} from '../../../../api/type';
 import AuthApi from './auth-api';
 
 const authApi = new AuthApi();
@@ -8,10 +8,15 @@ export const login = async (model: LoginRequestData) => {
   try {
     await authApi.login(model);
 
-    const userData = await authApi.me();
+    const userData: UserDTO | APIError = await authApi.me();
+
+    if ('message' in userData) {
+      throw new Error(userData.message);
+    }
+
     window.store.set({user: userData});
+
     console.log('Login successful:', userData);
-    console.log('Store state after login:', window.store.getState());
 
     window.router.go('/messenger');
   } catch (error) {

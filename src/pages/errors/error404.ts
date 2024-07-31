@@ -5,6 +5,8 @@ import {connect} from '../../scripts/connect';
 interface AppState {
   errorCode?: string;
   errorMessage?: string;
+  logoutError?: string;
+  registerError?: string;
 }
 
 interface Error404Props {

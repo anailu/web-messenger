@@ -7,6 +7,13 @@ export interface AppState {
   messages: Message[];
   user: User | null;
   selectedCard: any;
+  logoutError?: string;
+  registerError?: string;
+  loginField: string;
+  chats?: any[];
+  chatError?: string;
+  usersInChat?: any[];
+  foundUser?: any;
 }
 
 export enum StoreEvents {

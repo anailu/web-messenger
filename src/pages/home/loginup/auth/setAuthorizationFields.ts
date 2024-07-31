@@ -1,3 +1,3 @@
 export const fillLogin = (value: string) => {
-  window.store.set({loginFirld: value});
+  window.store.set({loginField: value});
 };
