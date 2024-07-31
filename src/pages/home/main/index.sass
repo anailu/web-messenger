@@ -14,12 +14,13 @@ body
   margin: 0
   display: flex
   min-height: 100vh
-  background-color: $background-color
 
 
 .whole_page
   display: flex
+  flex-direction: column
   width: 100%
+  background-color: $background-color
 
 button
   appearance: none
@@ -35,6 +36,8 @@ button
   padding: 30px 30px 5px 30px
   display: flex
   width: 100%
+  box-sizing: border-box
+  height: 100vh
 
   @media screen and (max-width: 768px)
     padding: 20px
@@ -52,6 +55,18 @@ button
 
 .profile_icon_link
   display: flex
+
+.avatar_image
+  width: 50px
+  height: 50px
+  border-radius: 50%
+  overflow: hidden
+  margin-right: 10px
+  flex-shrink: 0
+
+.search_input
+  margin: auto
+  background-color: inherit
 
 .input_search, .chat_input 
   background-color: $background-color
@@ -155,11 +170,16 @@ li
   flex: 1
 
 .dialog_content 
-  width: 100%
   display: flex
+  flex-direction: column-reverse
+  height: 100vh
+  overflow-y: auto
 
 .chat-topbar_container
   padding: 7px 
+  display: flex
+  justify-content: space-between
+  align-items: center
 
 .chat_bottombar 
   display: flex
@@ -204,3 +224,8 @@ li
   display: flex
   flex-direction: column
   height: 100%
+
+.dialogMenu_buttons
+  display: flex
+  justify-content: space-between
+  width: 10%

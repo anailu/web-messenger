@@ -1,9 +1,13 @@
-<form id="{{ formId }}">
+<form id="{{ formId }} class='{{ formClass }}">
     {{#if showAvatar}}
     <div class="avatar-container">
         <label for="avatar"></label>
         <input type='file' id='avatar' name='avatar'>
     </div>
+    {{/if}}
+
+    {{#if modalHeader}}
+    <h1 class="modal_window__header">{{ modalHeader }}</h1>
     {{/if}}
 
     <div class='{{ inputsContainerClass }}'>
