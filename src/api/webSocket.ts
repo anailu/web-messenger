@@ -10,7 +10,6 @@ interface Message {
 interface WebSocketData {
   type: string;
   content?: string;
-  [key: string]: any;
 }
 
 /**
@@ -53,14 +52,17 @@ class ChatWebSocket {
     });
 
     this.socket.addEventListener('message', (event) => {
-      const data = JSON.parse(event.data);
-      console.log('Message received:', data);
-      this.handleMessage(data);
+      try {
+        const data = JSON.parse(event.data);
+        console.log('Message received:', data);
+        this.handleMessage(data);
+      } catch (error) {
+        console.error('Error parsing message data:', error);
+      }
     });
 
     this.socket.addEventListener('close', (event) => {
       console.log('Close event code:', event.code, 'Reason:', event.reason);
-      console.log('WebSocket connection closed', event);
       this.stopPing();
     });
 

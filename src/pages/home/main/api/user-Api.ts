@@ -1,9 +1,5 @@
 import UserApi from '../../../../api/userApi';
-
-interface User {
-  id: number;
-  login: string;
-}
+import {User} from '../../../../api/type';
 
 const userApi = new UserApi();
 

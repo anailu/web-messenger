@@ -1,4 +1,5 @@
 import ChatApi, {GetChatsParams} from '../../../../api/chatApi';
+import {APIError} from '../../../../api/type';
 
 export const chatApi = new ChatApi();
 
@@ -9,9 +10,8 @@ export const chatApi = new ChatApi();
  *
  * @async
  * @function
- * @returns {Promise<void>}
+ * @return {Promise<void>}
  */
-
 export const getChats = async () => {
   window.store.set({isLoading: true});
   try {
@@ -19,7 +19,11 @@ export const getChats = async () => {
     const chats = await chatApi.getChats(params);
     console.log('Loaded chats(chats-api):', chats);
 
-    window.store.set({chats});
+    if (Array.isArray(chats)) {
+      window.store.set({chats});
+    } else {
+      throw new Error((chats as APIError).reason || 'Unknown error');
+    }
   } catch (error) {
     console.error('Error getting chats:', error);
     window.store.set({chatError: 'some error'});
@@ -53,6 +57,7 @@ export const setActiveChat = (card: any) => {
 export async function createChat(title: string): Promise<void> {
   try {
     await chatApi.createChat({title});
+    await getChats();
     alert('chat created successfully');
   } catch (error) {
     console.error('error creating chat:', error);
@@ -72,6 +77,8 @@ export async function createChat(title: string): Promise<void> {
 export async function deleteChat(chatId: number): Promise<void> {
   try {
     await chatApi.deleteChat({chatId});
+    await getChats();
+    window.store.set({selectedCard: null});
     alert('Chat deleted successfully');
   } catch (error) {
     console.error('Error deleting chat:', error);

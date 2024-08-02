@@ -1,5 +1,6 @@
 import {HTTPTransport} from '../scripts/httpTransport';
-import {APIError} from './type';
+import {APIError, ChatDTO} from './type';
+
 
 const chatApi = new HTTPTransport('/chats');
 
@@ -25,9 +26,9 @@ export default class ChatApi {
   /**
    * Получает список чатов с возможностью фильтрации
    * @param {GetChatsParams} params - Параметры запроса для получения чатов
-   * @return {Promise<any | APIError>} - Список чатов или ошибка API
+   * @return {Promise<ChatDTO | APIError>} - Список чатов или ошибка API
    */
-  async getChats(params: GetChatsParams): Promise<any | APIError> {
+  async getChats(params: GetChatsParams): Promise<ChatDTO | APIError> {
     const queryString = Object.keys(params)
         .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(
           params[key as keyof GetChatsParams]!
@@ -39,18 +40,18 @@ export default class ChatApi {
   /**
    * Создает новый чат
    * @param {CreateChatRequest} data - Данные запроса для создания чата
-   * @return {Promise<any | APIError>} - Информация о созданном чате или ошибка API
+   * @return {Promise<{ id: number } | APIError>} - Информация о созданном чате или ошибка API
    */
-  async createChat(data: CreateChatRequest): Promise<any | APIError> {
+  async createChat(data: CreateChatRequest): Promise<{ id: number } | APIError> {
     return chatApi.post('', {data});
   }
 
   /**
    * Удаляет существующий чат
    * @param {CreateChatRequest} data - Данные запроса для удаления чата
-   * @return {Promise<any | APIError>} - Результат операции удаления чата или ошибка API
+   * @return {Promise<{ result: string } | APIError>} - Результат удаления чата или ошибка API
    */
-  async deleteChat(data: DeleteChatRequest): Promise<any | APIError> {
+  async deleteChat(data: DeleteChatRequest): Promise<{ result: string } | APIError> {
     return chatApi.delete('', {data});
   }
 

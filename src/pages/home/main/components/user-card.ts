@@ -6,10 +6,10 @@ import ChatWebSocket from '../../../../api/webSocket';
 import ChatApi from '../../../../api/chatApi';
 import {Chat} from '../messengerPage';
 
-interface UserCardProps {
+export interface UserCardProps {
   id: number;
   title: string;
-  avatar: string;
+  avatar: string | null;
   activeId?: number;
   selectedCard?: { id: number };
   click?: (chat: Chat) => void;
@@ -105,7 +105,7 @@ class UserCard extends Block {
             </div>
           </li>
         </div>
-          `;
+      `;
   }
 }
 

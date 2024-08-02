@@ -34,7 +34,13 @@ class EditProfileForm extends Block {
    * Инициализирует элементы формы и устанавливает события.
    */
   init() {
-    const {email, firstName, secondName, login, phone} = this.props.user;
+    const {
+      email,
+      first_name: firstName,
+      second_name: secondName,
+      login,
+      phone,
+    } = this.props.user;
 
     this.children.avatarInput = new Input({
       type: 'file',

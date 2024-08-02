@@ -1,8 +1,9 @@
 import Block from '../core/block';
+import Modal from '../pages/home/profile/modals/modal';
 
 interface EditButtonProps {
   text: string;
-  modal: any;
+  modal: Modal;
   events?: {
     click?: (event: MouseEvent) => void;
   };

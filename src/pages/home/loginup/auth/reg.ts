@@ -1,11 +1,13 @@
 import AuthApi from './auth-api';
+import {CreateUser} from '../../../../api/type';
 
 const authApi = new AuthApi();
 
-export const register = async (model: any) => {
+export const register = async (model: unknown) => {
   window.store.set({isLoading: true});
   try {
-    const response = await authApi.create(model);
+    const createUserModel = model as CreateUser;
+    const response = await authApi.create(createUserModel);
     console.log('Registration response:', response);
 
     const userData = await authApi.me();

@@ -1,5 +1,5 @@
 Макет: https://www.figma.com/file/eiGgEC5wD5Nr8VczIeZcaC/messenger?type=design&node-id=0%3A1&mode=design&t=OrCLTYyerP9YgWme-1
-Домен из netlify: gentle-seahorse-01b3d6.netlify.app
+Домен из netlify: https://gentle-seahorse-01b3d6.netlify.app/
 
 Cтраницы мессенджера:
 Регистрация:

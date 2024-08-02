@@ -1,13 +1,7 @@
 import ErrorBlock from './index';
 import Block from '../../core/block';
 import {connect} from '../../scripts/connect';
-
-interface AppState {
-  errorCode?: string;
-  errorMessage?: string;
-  logoutError?: string;
-  registerError?: string;
-}
+import {AppState} from '../../api/type';
 
 interface Error404Props {
   errorCode?: string;

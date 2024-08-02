@@ -1,5 +1,6 @@
 import {Store} from '../scripts/store';
 import Router from '../core/router';
+import {Chat} from '../pages/home/main/messengerPage';
 
 declare global {
   interface Window {
@@ -27,7 +28,6 @@ export type UserDTO = {
   avatar: string;
   phone: string;
   email: string;
-  [key: string]: any;
 };
 
 export type CreateUser = Omit<UserDTO, 'avatar' | 'display_name' | 'id'> & {
@@ -43,7 +43,7 @@ export type LoginRequestData = {
   password: string
 }
 
-type LastMessage = {
+export type LastMessage = {
   user: UserDTO,
   time: string,
   content: string
@@ -55,7 +55,7 @@ export type ChatDTO = {
   avatar: string | null,
   unread_count: number,
   last_message: LastMessage | null,
-  click: any
+  click: () => void
 }
 
 export interface UpdateUserProfileRequest {
@@ -101,7 +101,6 @@ export interface State {
   updateError?: string | null;
   updatePasswordError?: string | null;
   updateAvatarError?: string | null;
-  [key: string]: any;
 }
 
 export interface User {
@@ -114,5 +113,21 @@ export interface User {
   avatar: string;
   phone: string;
   email: string;
-  [key: string]: any;
+}
+
+export interface AppState {
+  isLoading: boolean;
+  errorCode?: string;
+  errorMessage?: string;
+  logoutError?: string;
+  registerError?: string;
+  loginError: string | null;
+  messages: Message[];
+  user: User | null;
+  selectedCard: Chat | null;
+  loginField: string;
+  chats?: Chat[];
+  chatError?: string;
+  usersInChat?: User[];
+  foundUser?: User | null;
 }

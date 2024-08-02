@@ -8,7 +8,6 @@ interface RegistrationPageProps {
   regField?: string;
   isLoading?: boolean;
   registrationError?: string;
-  [key: string]: any;
 }
 
 /**

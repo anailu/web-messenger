@@ -5,11 +5,12 @@ import SearchBar from '../../../components/search';
 import LogoutButton from '../../../components/logout';
 import AddChatButton from './components/addChatButton';
 import AddChatModal from './components/modals/addChatModal';
-import {createChat} from './api/chats-api';
+import {createChat, getChats} from './api/chats-api';
 import {State, User} from '../../../api/type';
+import {UserCardProps} from './components/user-card';
 
 interface ListCardProps {
-  cards: any[];
+  cards: UserCardProps[];
   showEmpty?: boolean;
   isLoading?: boolean;
   user?: User;
@@ -53,7 +54,11 @@ class ListCard extends Block {
     const logoutButton = new LogoutButton({});
 
     const addChatModal = new AddChatModal({
-      onSubmit: createChat.bind(this),
+      onSubmit: (title: string) => {
+        createChat(title).then(() => {
+          this.updateChats();
+        });
+      },
     });
 
     const addChatButton = new AddChatButton({
@@ -67,6 +72,13 @@ class ListCard extends Block {
       addChatButton,
       addChatModal,
     };
+  }
+
+  /**
+ * Вызывает функцию получения списка чатов
+ */
+  updateChats() {
+    getChats();
   }
 
   /**

@@ -6,7 +6,6 @@ import {User, State} from '../../../api/type';
 
 interface ProfilePageProps {
   user: User;
-  [key: string]: any;
 }
 
 /**

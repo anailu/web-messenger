@@ -2,9 +2,13 @@ import Block from '../../../../core/block';
 
 interface FormWrapperProps {
   title: string;
-  formBody: Block<any>;
   onClick?: (event: Event) => void;
   onSubmit?: (event: Event) => void;
+  formBody: Block<FormComponent>;
+}
+
+interface FormComponent {
+  render(): string;
 }
 
 /**

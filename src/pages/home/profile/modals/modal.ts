@@ -1,8 +1,10 @@
 import Block from '../../../../core/block';
+import EditPasswordForm from './editPasswordForm';
+import EditProfileForm from './editProfileForm';
 
 interface ModalProps {
   visible?: boolean;
-  content?: any;
+  content?: string | EditProfileForm | EditPasswordForm;
   events?: {
     click?: (event: MouseEvent) => void;
   };

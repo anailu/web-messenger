@@ -1,20 +1,5 @@
 import EventBus from '../core/eventBus';
-import {User, Message} from '../api/type';
-
-export interface AppState {
-  isLoading: boolean;
-  loginError: string | null;
-  messages: Message[];
-  user: User | null;
-  selectedCard: any;
-  logoutError?: string;
-  registerError?: string;
-  loginField: string;
-  chats?: any[];
-  chatError?: string;
-  usersInChat?: any[];
-  foundUser?: any;
-}
+import {AppState} from '../api/type';
 
 export enum StoreEvents {
   Updated = 'Updated'

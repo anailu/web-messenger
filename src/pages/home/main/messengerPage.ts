@@ -6,16 +6,20 @@ import ChatTopBar from './components/chatTopBar';
 import MessageContent from './components/messageContent';
 import ChatBottomBar from './components/chatBottomBar';
 import {loadUserData} from '../profile/api/meApi';
+import {LastMessage} from '../../../api/type';
 
 export interface Chat {
-  id: string;
+  id: number;
   title: string;
-  avatar: string;
+  avatar: string | null;
   [key: string]: any;
+  unread_count: number,
+  last_message: LastMessage | null,
+  click: any
 }
 
 interface MessengerPageProps {
-  chats: any[];
+  chats: Chat[];
   selectChat?: Chat;
   userId: number;
 }
@@ -51,10 +55,16 @@ class MessengerPage extends Block {
    * Инициализирует компоненты страницы.
    */
   init(): void {
-    const onCardClikBind = this.onCardClick.bind(this);
+    const cards = this.props.chats.map((chat: Chat) => new UserCard({
+      id: chat.id,
+      title: chat.title,
+      avatar: chat.avatar,
+      activeId: this.props.activeChatId,
+      selectedCard: this.props.selectedCard,
+    }));
 
     const ListUser = new ListCard({
-      cards: this.mapUserCardToComponent(this.props.chats, null, onCardClikBind) || [],
+      cards,
     });
 
     const ChatTopBarComp = new ChatTopBar({
@@ -160,7 +170,6 @@ class MessengerPage extends Block {
     return `
       <div class="chat-container">
         {{{ ListUser }}}
-        
         {{#if selectChat}}
           <div class="column-right">
             {{{ ChatTopBarComp }}}

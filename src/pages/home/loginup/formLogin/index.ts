@@ -90,13 +90,13 @@ class FormLogin extends Block {
    * @param {Event} e - Событие отправки формы.
    */
   async onLogin(e: Event) {
-    e.preventDefault(); // Предотвращаем стандартное поведение отправки формы
+    e.preventDefault();
 
     const errors = this.validateAllFields();
 
     if (Object.keys(errors).length > 0) {
       console.log('Form validation failed:', errors);
-      return; // Останавливаем выполнение, если есть ошибки
+      return;
     }
 
     const formData = this.getFormData();
@@ -138,14 +138,14 @@ class FormLogin extends Block {
     for (const [key, field] of Object.entries(fields)) {
       if (field && field instanceof InputElement) {
         const value = field.getValue();
-        const validate = getValidationFunction(key); // Получаем функцию валидации
+        const validate = getValidationFunction(key);
         if (validate) {
           const isValid = validate(value);
           if (!isValid) {
-            errors[key] = `Enter a valid ${key}`; // Сообщение об ошибке
+            errors[key] = `Enter a valid ${key}`;
             field.setProps({errorText: errors[key]});
           } else {
-            field.setProps({errorText: ''}); // Очистка сообщения об ошибке
+            field.setProps({errorText: ''});
           }
         }
       } else {

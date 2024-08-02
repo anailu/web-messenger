@@ -1,9 +1,10 @@
 import Block from '../core/block';
 import profileIcon from '../static/images/profile_icon.svg';
 import {loadProfile} from '../api/me';
+import {User} from '../api/type';
 
 interface ProfileButtonProps {
-  user?: any;
+  user?: User;
   events?: {
     click?: () => void;
   };

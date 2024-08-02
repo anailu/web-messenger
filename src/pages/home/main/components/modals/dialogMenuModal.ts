@@ -4,7 +4,7 @@ interface SmallModalProps {
   title: string;
   content: string;
   buttonText: string;
-  onSubmit: any;
+  onSubmit: () => void;
 }
 
 /**

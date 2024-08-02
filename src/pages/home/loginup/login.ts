@@ -9,7 +9,6 @@ interface LoginPageProps {
   passwordField?: string;
   isLoading?: boolean;
   loginError?: string;
-  [key: string]: any;
 }
 
 /**

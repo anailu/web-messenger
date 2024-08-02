@@ -62,15 +62,19 @@ class InputElement extends Block {
    * @return {boolean} - Флаг необходимости перерисовки компонента
    */
   componentDidUpdate(oldProps: InputElementProps, newProps: InputElementProps): boolean {
+    let hasChanged = false;
+
     if (oldProps.value !== newProps.value) {
       this.children.Input.setProps({value: newProps.value || ''});
+      hasChanged = true;
     }
 
     if (oldProps.errorText !== newProps.errorText) {
       this.children.ErrorLine.setProps({error: newProps.errorText});
+      hasChanged = true;
     }
 
-    return true;
+    return hasChanged;
   }
 
   /**

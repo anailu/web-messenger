@@ -1,11 +1,22 @@
+interface Block {
+  getContent(): HTMLElement;
+  show(): void;
+  hide(): void;
+}
+
+interface RouteProps {
+  rootQuery: string;
+  [key: string]: any; // Позволяет дополнительные свойства
+}
+
 /**
  * Класс для представления маршрута в приложении
  */
 class Route {
   private _pathname: string;
-  private _blockClass: any;
-  private _block: any;
-  private _props: any;
+  private _blockClass: new (props: any) => Block;
+  private _block: Block | null;
+  private _props: RouteProps;
   private _beforeEnter: (() => Promise<void>) | null;
 
   /**
@@ -17,8 +28,8 @@ class Route {
    */
   constructor(
       pathname: string,
-      view: any,
-      props: any, beforeEnter: (() => Promise<void>) | null = null
+      view: new (props: any) => Block,
+      props: RouteProps, beforeEnter: (() => Promise<void>) | null = null
   ) {
     this._pathname = pathname;
     this._blockClass = view;
