@@ -6,7 +6,18 @@ $font-family: Inter, system-ui, Montserrat, Arial, sans-serif
 body 
   margin: 0
   font-family: $font-family
-  background-color: $edit-background-color
+
+.profilePage_container
+  display: flex
+  height: 100vh
+  align-items: center
+  justify-content: center
+
+.profile-container
+    display: flex
+    flex-direction: column
+    width: 25%
+    margin: auto 0
 
 .main_container
   display: flex
@@ -18,7 +29,7 @@ body
   height: 24px
   cursor: pointer
 
-.profile-container
+.content-container
   display: flex
   flex-direction: column
   width: 25%
@@ -33,6 +44,15 @@ body
   background-color: #9EA3B0
   width: 130px
   height: 130px
+  overflow: hidden
+
+.avatar_img
+  width: 100%
+  height: 100%
+  object-fit: cover
+
+.attachFile_input
+  display: none
 
 .list-info
   margin: 48px 0
@@ -54,16 +74,13 @@ body
   margin-bottom: 10px
   margin-top: 10px
 
-.edit_link
-  margin-left: auto
+.editing-link_buttons
+  display: flex
+  flex-direction: column
 
-input
-  background-color: $edit-background-color
-  border: none
-  border-bottom: 0.5px solid #0D1F2D
-  width: 100%
-  margin-bottom: 10px
-  box-sizing: border-box
+.edit-link
+  margin-left: auto
+  color: inherit
 
 label
   color: #9EA3B0

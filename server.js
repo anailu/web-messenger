@@ -11,12 +11,8 @@ const PORT = 3000;
 
 app.use(express.static(path.join(__dirname, 'dist')));
 
-app.use(express.static('./'));
-app.use('/pages', express.static('src/pages'));
-app.use('/static', express.static('static'));
-
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/index.html'));
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'dist', 'index.html'));
 });
 
 app.listen(PORT, () => {

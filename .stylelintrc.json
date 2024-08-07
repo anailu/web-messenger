@@ -6,7 +6,7 @@
     },
     "ignoreFiles": [
       "dist/*",
-      "src/components/*.sass",
+      "src/components/button/*.sass",
       "src/styles/*.sass",
       "src/pages/errors/*.sass",
       "src/pages/home/loginup/*.sass",

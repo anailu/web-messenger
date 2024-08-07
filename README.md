@@ -1,40 +1,31 @@
 Макет: https://www.figma.com/file/eiGgEC5wD5Nr8VczIeZcaC/messenger?type=design&node-id=0%3A1&mode=design&t=OrCLTYyerP9YgWme-1
-Домен из netlify: gentle-seahorse-01b3d6.netlify.app
+Домен из netlify: https://gentle-seahorse-01b3d6.netlify.app/
 
-Сверстанные страницы:
-Чаты:
-https://gentle-seahorse-01b3d6.netlify.app/
-http://localhost:3000/src/pages/home/main/index.html
-
-Профиль:
-http://localhost:3000/src/pages/home/profile/profile.html
-https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/profile
-
-Редактировать профиль:
-http://localhost:3000/src/pages/home/profile/edit_profile.html
-https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/edit_profile
-
-Редактировать пароль:
-http://localhost:3000/src/pages/home/profile/edit_password.html
-https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/profile/edit_password
-
-Ошибки:
-http://localhost:3000/src/pages/errors/error.html
-https://gentle-seahorse-01b3d6.netlify.app/src/pages/errors/error
+Cтраницы мессенджера:
+Регистрация:
+http://localhost:3000/sign-up
 
 Логин:
-http://localhost:3000/src/pages/home/loginup/login.html
-https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/loginup/login
+http://localhost:3000/
 
-Регистрация:
-http://localhost:3000/src/pages/home/loginup/registration.html
-https://gentle-seahorse-01b3d6.netlify.app/src/pages/home/loginup/registration
+Список чатов:
+http://localhost:3000/messenger
 
-Messenger разрабатывается с использованием JS, TS, Hаndlebars, препроцессора Sass, для сборки проекта и раздачи статики используется Vite и Express.
-Для линтинга кода используется ESLint с правилами ОТ Google.
+Профиль:
+http://localhost:3000/settings
 
-Мессенджер в процессе разработки, планируется реализовать привычную всем логику чатов с отправкой и получением текстовыйх сообщений и различных типов файлов.
-Зарегистрировавшись, пользователь будет иметь профиль с аватаркой, возможность редактировать свои данные и пароль.
+Ошибки:
+http://localhost:3000/*
+
+
+
+Мессенджер разрабатывается с использованием JS, TS, Hаndlebars, препроцессора Sass, для сборки проекта используется Vite и Express раздает статику.
+Для линтинга кода используется ESLint с правилами от Google.
+
+Мессенджер в процессе разработки, на данный момент реализована основа привычной логики чатов с отправкой и получением текстовых сообщений.
+Зарегистрировавшись, пользователь имеет профиль с аватаркой, возможность редактировать свои данные и пароль.
+Реализована возможность создания чата, поиск пользователя и добавление его в чат, удаление чата. Для работы с сообщениями используется WebSocket.
+Добавлен санитайзинг для защиты от xss.
 
 
 Для сборки и запуска проекта используется ```npm run start```.
