@@ -1,25 +1,15 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import {HTTPTransport, METHOD} from './httpTransport';
+import {Response} from 'node-fetch';
 
 describe('HTTPTransport', () => {
   let http: HTTPTransport;
   let fetchStub: sinon.SinonStub;
 
-  before(() => {
-    if (typeof globalThis.fetch === 'undefined') {
-      globalThis.fetch = async (): Promise<Response> => {
-        return new Response(JSON.stringify({}), {
-          status: 200,
-          headers: {'Content-Type': 'application/json'},
-        });
-      };
-    }
-  });
-
   beforeEach(() => {
     http = new HTTPTransport('/test-path');
-    fetchStub = sinon.stub(global, 'fetch');
+    fetchStub = sinon.stub(globalThis, 'fetch');
   });
 
   afterEach(() => {
