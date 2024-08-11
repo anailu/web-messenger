@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare": "husky init",
+    "prepare": "husky install",
     "start": "npm run lint && npm run build && node server.js",
     "dev": "vite",
     "build": "vite build",
