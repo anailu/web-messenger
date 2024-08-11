@@ -5,6 +5,10 @@ import {connectToChat} from '../api/chatWebSocketManager';
 import ChatWebSocket from '../../../../api/webSocket';
 import ChatApi from '../../../../api/chatApi';
 import {Chat} from '../messengerPage';
+import defaultAvatar from '../../../../static/images/default_avatar.png';
+import {getChatUsers} from '../api/chats-api';
+
+const BASE_URL = 'https://ya-praktikum.tech/api/v2/resources/';
 
 export interface UserCardProps {
   id: number;
@@ -38,9 +42,9 @@ class UserCard extends Block {
             avatar: props.avatar,
             id: props.id,
           };
-          console.log('Card:', card);
           setActiveChat(card);
           this.connectToChatHere(card.id);
+          await getChatUsers(card.id);
         },
       },
     });
@@ -59,8 +63,6 @@ class UserCard extends Block {
       this.chatWebSocket.close();
       this.chatWebSocket = null;
     }
-
-    setActiveChat({id: chatId, messages: []});
 
     const store = window.store.getState();
     const userId = store.user.id;
@@ -90,11 +92,15 @@ class UserCard extends Block {
   render(): string {
     const isActive = this.props.selectedCard?.id === this.props.id;
 
+    const avatarUrl = this.props.avatar ?
+      `${BASE_URL}${this.props.avatar}` :
+      defaultAvatar;
+
     return `
-        <div class="card{{#if ${isActive}}}card_active{{/if}}">
+        <div class="{{#if ${isActive}}}card_active{{/if}}">
           <li class='chat_container' data-chat-id='{{id}}'>
             <div class='avatar_container'>
-              <img src='{{{avatar}}}' alt="chat's avatar" class='avatar_image'>
+              <img src='${avatarUrl}' alt="chat's avatar" class='avatar_image'>
             </div>
             <div class='dialog_container'>
               <div class='dialog_title'>

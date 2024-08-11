@@ -16,6 +16,7 @@ export const loadProfile = async () => {
 
     window.router.go('/settings');
   } catch (error) {
+    console.error(error);
     window.store.set({loginError: 'failed'});
   } finally {
     window.store.set({isLoading: false});

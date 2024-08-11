@@ -1,5 +1,6 @@
-import ChatApi, {GetChatsParams} from '../../../../api/chatApi';
+import ChatApi, {GetChatsParams, GetChatUsersParams} from '../../../../api/chatApi';
 import {APIError} from '../../../../api/type';
+import {Chat} from '../messengerPage';
 
 export const chatApi = new ChatApi();
 
@@ -85,3 +86,80 @@ export async function deleteChat(chatId: number): Promise<void> {
     alert('Failed to delete chat.');
   }
 }
+
+/**
+ * Загружает список пользователей чата и обновляет состояние хранилища.
+ * Если произошла ошибка, устанавливает соответствующее сообщение об ошибке в хранилище.
+ *
+ * @async
+ * @function
+ * @param {number} chatId - Идентификатор чата
+ * @param {GetChatUsersParams} params - Параметры запроса для получения пользователей чата
+ * @return {Promise<void>}
+ */
+export const getChatUsers = async (
+    chatId: number,
+    params: GetChatUsersParams = {
+      offset: 0,
+      limit: 10,
+    }
+) => {
+  window.store.set({isLoading: true});
+  try {
+    const users = await chatApi.getChatUsers(chatId, params);
+    console.log('Loaded chat users:', users);
+
+    if (Array.isArray(users)) {
+      window.store.set({usersInChat: users});
+      return users;
+    } else {
+      throw new Error((users as APIError).reason || 'Unknown error');
+    }
+  } catch (error) {
+    console.error('Error getting chat users:', error);
+    window.store.set({errorCode: 'some error'});
+
+    return null;
+  } finally {
+    window.store.set({isLoading: false});
+  }
+};
+
+/**
+ * Загружает аватар чата и обновляет состояние хранилища.
+ * Если произошла ошибка, устанавливает соответствующее сообщение об ошибке в хранилище.
+ *
+ * @async
+ * @function
+ * @param {number} chatId - Идентификатор чата.
+ * @param {File} avatar - Новый аватар для чата.
+ * @return {Promise<void>}
+ */
+export const uploadChatAvatar = async (chatId: number, avatar: File): Promise<void> => {
+  window.store.set({isLoading: true});
+  try {
+    const result = await chatApi.uploadChatAvatar({chatId, avatar});
+    console.log('avatar upload result:', result);
+
+    if (result) {
+      alert('avatar uploaded successfully');
+      await getChats();
+
+      const updatedChatList = window.store.getState().chats;
+      const updatedChat = updatedChatList.find((chat: Chat) => chat.id === chatId);
+
+      if (updatedChat) {
+        window.store.set({
+          selectedCard: updatedChat,
+        });
+      }
+    } else {
+      throw new Error((result as APIError).reason || 'unknown error');
+    }
+  } catch (error) {
+    console.error('error uploading chat avatar:', error);
+    window.store.set({chatError: 'failed to upload avatar'});
+  } finally {
+    window.store.set({isLoading: false});
+  }
+};

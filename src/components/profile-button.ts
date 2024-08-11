@@ -41,7 +41,7 @@ class ProfileButton extends Block {
   render() {
     return `
       <div class="profile-icon-link" title="your profile">
-        <a class="profile-link">
+        <a class="profile_link">
             <img src="${profileIcon}" class="profile-icon" alt="profile">
         </a>
       </div>

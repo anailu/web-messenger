@@ -1,15 +1,16 @@
 import Block from '../../../../core/block';
 import addMember from '../../../../static/images/add_member.svg';
-import delMember from '../../../../static/images/del_member.svg';
 import delChat from '../../../../static/images/del_chat.svg';
-import SmallModal from './modals/dialogMenuModal';
+import SmallModal from './modals/chatMenuModal';
 import IconButton from './iconButton';
-import {deleteChat} from '../api/chats-api';
-import {addUsersToChat} from '../api/chatsUsers-api';
-import {findUser} from '../api/user-Api';
-import {delUsersFromChat} from '../api/chatsUsers-api';
+import ChatHeader from './chatHeader';
+import ChatInfoModal from './modals/chatInfoModal';
+import {deleteChat, addUsersToChat, findUser} from '../api';
+import {connect} from '../../../../scripts/connect';
+import {SelectedCard} from '../../../../api/type';
 
 interface ChatTopBarProps {
+  selectedCard?: SelectedCard;
   title: string;
   avatar: string;
   chatId: number;
@@ -27,6 +28,7 @@ class ChatTopBar extends Block {
   constructor(props: ChatTopBarProps) {
     super({
       ...props,
+      users: [],
     });
   }
 
@@ -64,34 +66,6 @@ class ChatTopBar extends Block {
       },
     });
 
-    const delMemberModal = new SmallModal({
-      title: 'delete member',
-      content: '<input type="text" id="deleteMemberLogin" placeholder="login" />',
-      buttonText: 'delete',
-      onSubmit: async () => {
-        const input = document.getElementById('deleteMemberLogin') as HTMLInputElement;
-        const login = input.value;
-
-        if (login) {
-          try {
-            const user = await findUser(login);
-
-            if (user) {
-              await delUsersFromChat([user.id], this.props.chatId);
-              alert(`User ${user.login} removed from chat`);
-            } else {
-              alert('User not found');
-            }
-          } catch (error) {
-            console.error('Error during user search or removal:', error);
-            alert('Failed to remove user from chat.');
-          } finally {
-            delMemberModal.hide();
-          }
-        }
-      },
-    });
-
     const delChatModal = new SmallModal({
       title: 'delete chat',
       content: '<p>are you sure you want to delete this chat?</p>',
@@ -109,49 +83,84 @@ class ChatTopBar extends Block {
       modal: addMemberModal,
     });
 
-    const delMemberButton = new IconButton({
-      icon: delMember,
-      modal: delMemberModal,
-    });
-
     const delChatButton = new IconButton({
       icon: delChat,
       modal: delChatModal,
     });
 
+    const chatInfoModal = new ChatInfoModal({
+      chatId: this.props.chatId,
+      users: [],
+      chatTitle: '',
+      chatAvatar: '',
+      onSubmit: () => {
+        console.log('submit');
+      },
+    });
+
+    const chatHeader = new ChatHeader({
+      avatar: this.props.selectedCard?.avatar || this.props.avatar,
+      title: this.props.selectedCard?.title || this.props.title,
+      chatId: this.props.selectedCard?.id || this.props.chatId,
+      modal: chatInfoModal,
+    });
+
     this.children = {
+      chatHeader,
       addMemberButton,
-      delMemberButton,
       delChatButton,
       addMemberModal,
-      delMemberModal,
       delChatModal,
+      chatInfoModal,
     };
   }
+
+  /**
+   * Обновляет компонент, если свойства изменились
+   * @param {ChatTopBarProps} oldProps - Предыдущие свойства
+   * @param {ChatHeaderProps} newProps - Новые свойства
+   * @return {boolean} - Возвращает true, если свойства изменились
+   */
+  componentDidUpdate(oldProps: ChatTopBarProps, newProps: ChatTopBarProps): boolean {
+    console.log('ChatTopBar updated:', newProps.selectedCard);
+    if (oldProps.selectedCard !== newProps.selectedCard) {
+      const newAvatar = newProps.selectedCard?.avatar || this.props.avatar;
+      const newTitle = newProps.selectedCard?.title || this.props.title;
+
+      this.children.chatHeader.setProps({
+        avatar: newAvatar,
+        title: newTitle,
+      });
+    }
+
+    return true;
+  }
+
   /**
    * Рендеринг компонента
    * @return {string} Шаблон компонента.
    */
   render() {
-    const {title, avatar} = this.props;
-
     return `
       <div class="chat-topbar_container person">
-        <div class="person">
-          <img class="person-avatar avatar_image" src="${avatar}" alt="chat's avatar">
-          <div class="person-name">${title}</div>
-        </div> 
+        {{{chatHeader}}}
         <div class="dialogMenu_buttons">
           {{{addMemberButton}}}
-          {{{delMemberButton}}}
           {{{delChatButton}}}
         </div>
         {{{addMemberModal}}}
-        {{{delMemberModal}}}
         {{{delChatModal}}}
+        {{{chatInfoModal}}}
       </div>
     `;
   }
 }
 
-export default ChatTopBar;
+const mapStateToProps = (state: {
+  selectedCard?: SelectedCard
+}) => ({
+  selectedCard: state.selectedCard,
+  chatId: state.selectedCard?.id,
+});
+
+export default connect(mapStateToProps)(ChatTopBar);

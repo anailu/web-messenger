@@ -1,7 +1,10 @@
-@import '../../../styles/input.sass'
+@import './input.sass'
 
 $background-color-wodalWindow: #0D1F2D
 $background-color-container: #546A7B
+$overlay-background: rgba(0, 0, 0, 0.5)
+$overlay-color: white
+$transition-duration: 0.3s
 
 body
   font-family: Inter, system-ui, Montserrat, Arial, sans-serif
@@ -64,6 +67,18 @@ label
   align-items: center
   z-index: 1000
 
+.chatInfoTitle
+  margin: 0
+
+.chatAvatar_input
+  display: none
+
+.modal-header
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+
 .modal--visible
   display: flex
   background-color: $background-color-container
@@ -77,10 +92,53 @@ label
 
 .smallModal
   background-color: $background-color-container
-
-.chatTitle_input
-  color: #999999
-  
-.smallModal
+  border-radius: 12px
   width: 30%
   margin: 20vh auto
+  padding: 35px 45px
+
+.chatTitle_input
+  color: #1E1E1E
+
+.chatAvatar_label 
+  position: relative
+  display: inline-block
+  cursor: pointer
+
+.chat_image
+  display: block
+  transition: opacity $transition-duration ease
+  width: 100px
+  height: 100px
+  border-radius: 50%
+  overflow: hidden
+  flex-shrink: 0
+
+.overlay 
+  position: absolute
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: $overlay-background
+  color: $overlay-color
+  font-size: 16px
+  display: flex
+  align-items: center
+  justify-content: center
+  opacity: 0
+  transition: opacity $transition-duration ease
+  border-radius: 50%
+
+  &:hover 
+    opacity: 1
+
+    .chat_image 
+      opacity: 0.7
+
+.user-name
+  width: 80%
+
+.deleteMember_button
+  &:hover
+    color: #800F1C

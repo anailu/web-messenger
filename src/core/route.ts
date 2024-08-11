@@ -6,7 +6,7 @@ interface Block {
 
 interface RouteProps {
   rootQuery: string;
-  [key: string]: any; // Позволяет дополнительные свойства
+  [key: string]: any;
 }
 
 /**
@@ -65,6 +65,14 @@ class Route {
    */
   match(pathname: string): boolean {
     return pathname === this._pathname;
+  }
+
+  /**
+   * Возвращает текущий путь маршрута.
+   * @return {string} Текущий путь маршрута.
+   */
+  get pathname(): string {
+    return this._pathname;
   }
 
   /**

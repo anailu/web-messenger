@@ -6,7 +6,11 @@ const authApi = new AuthApi();
 export const login = async (model: LoginRequestData) => {
   window.store.set({isLoading: true});
   try {
-    await authApi.login(model);
+    const loginResponse = await authApi.login(model);
+
+    if (!(loginResponse instanceof Response) || loginResponse.status !== 200) {
+      throw new Error('Login failed: Status not 200');
+    }
 
     const userData: UserDTO | APIError = await authApi.me();
 
@@ -16,10 +20,9 @@ export const login = async (model: LoginRequestData) => {
 
     window.store.set({user: userData});
 
-    console.log('Login successful:', userData);
-
     window.router.go('/messenger');
   } catch (error) {
+    console.error(error);
     window.store.set({loginError: 'Login failed'});
   } finally {
     window.store.set({isLoading: false});

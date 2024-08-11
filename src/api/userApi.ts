@@ -1,4 +1,4 @@
-import {HTTPTransport} from '../scripts/httpTransport';
+import {HTTPTransport} from './httpTransport';
 import {
   APIError,
   FindUserRequest,

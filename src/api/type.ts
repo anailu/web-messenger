@@ -101,6 +101,7 @@ export interface State {
   updateError?: string | null;
   updatePasswordError?: string | null;
   updateAvatarError?: string | null;
+  usersInChat: UserDTO;
 }
 
 export interface User {
@@ -130,4 +131,10 @@ export interface AppState {
   chatError?: string;
   usersInChat?: User[];
   foundUser?: User | null;
+}
+
+export interface SelectedCard {
+  avatar: string | null;
+  title: string;
+  id: number;
 }

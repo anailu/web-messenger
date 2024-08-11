@@ -2,7 +2,6 @@ import Block from '../../../core/block';
 import {connect} from '../../../scripts/connect';
 import ProfileButton from '../../../components/profile-button';
 import SearchBar from '../../../components/search';
-import LogoutButton from '../../../components/logout';
 import AddChatButton from './components/addChatButton';
 import AddChatModal from './components/modals/addChatModal';
 import {createChat, getChats} from './api/chats-api';
@@ -51,7 +50,6 @@ class ListCard extends Block {
       user: window.store.getState().user,
     });
 
-    const logoutButton = new LogoutButton({});
 
     const addChatModal = new AddChatModal({
       onSubmit: (title: string) => {
@@ -68,7 +66,6 @@ class ListCard extends Block {
     this.children = {
       searchBar,
       profileButton,
-      logoutButton,
       addChatButton,
       addChatModal,
     };
@@ -104,7 +101,7 @@ class ListCard extends Block {
             {{{addChatButton}}}
           </div>
           {{#if showEmpty}}
-              <h2>no conversations yet</h2>
+              <h2 class="noChats_title">no conversations yet</h2>
           {{else}}
             {{{cards}}}
           {{/if}}

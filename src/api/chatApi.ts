@@ -1,5 +1,5 @@
-import {HTTPTransport} from '../scripts/httpTransport';
-import {APIError, ChatDTO} from './type';
+import {HTTPTransport} from './httpTransport';
+import {APIError, ChatDTO, UserDTO} from './type';
 
 
 const chatApi = new HTTPTransport('/chats');
@@ -16,6 +16,19 @@ export interface CreateChatRequest {
 
 export interface DeleteChatRequest {
   chatId: number;
+}
+
+export interface GetChatUsersParams {
+  offset?: number;
+  limit?: number;
+  name?: string;
+  email?: string;
+}
+
+
+export interface UploadAvatarRequest {
+  chatId: number;
+  avatar: File;
 }
 
 /**
@@ -71,5 +84,33 @@ export default class ChatApi {
    */
   async getNewMessagesCount(chatId: number): Promise<{ unread_count: number } | APIError> {
     return chatApi.get(`/new/${chatId}`);
+  }
+
+  /**
+   * Получает список пользователей чата
+   * @param {number} chatId - Идентификатор чата
+   * @param {GetChatUsersParams} params - Параметры запроса для получения пользователей
+   * @return {Promise<UserDTO[] | APIError>} - Список пользователей или ошибка API
+   */
+  async getChatUsers(chatId: number, params: GetChatUsersParams): Promise<UserDTO[] | APIError> {
+    const queryString = Object.keys(params)
+        .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(
+        params[key as keyof GetChatUsersParams]!
+        )}`)
+        .join('&');
+    return await chatApi.get(`/${chatId}/users?${queryString}`);
+  }
+
+  /**
+   * Установка аватара чата
+   * @param {UploadAvatarRequest} data - Объект с идентификатором чата и файлом аватара
+   * @return {Promise<{ result: string } | APIError>} - Результат операции или ошибка API
+   */
+  async uploadChatAvatar(data: UploadAvatarRequest): Promise<{ result: string } | APIError> {
+    const formData = new FormData();
+    formData.append('chatId', data.chatId.toString());
+    formData.append('avatar', data.avatar);
+
+    return chatApi.put('/avatar', {data: formData});
   }
 }

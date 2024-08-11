@@ -48,7 +48,7 @@ class LoginPage extends Block {
           {{else}}
             {{{ FormLogin }}}
             {{#if loginError}}
-                <p>{{{loginError}}}</p>
+                <p class="error">{{{loginError}}}</p>
             {{/if}}
           {{/if}}
         </div>

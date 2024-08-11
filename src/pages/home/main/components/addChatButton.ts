@@ -1,5 +1,6 @@
 import Block from '../../../../core/block';
 import AddChatModal from './modals/addChatModal';
+import createChatIcon from '../../../../static/images/create_chat.svg';
 
 interface AddChatButtonProps {
   modal: AddChatModal;
@@ -39,7 +40,9 @@ class AddChatButton extends Block {
    */
   render() {
     return `
-      <button class="addChat-button" style="color: green;">add chat</button>
+      <button class="addChat-button">
+        <img src="${createChatIcon}" class="createChat_icon" alt="create chat" title="create chat">
+      </button>
     `;
   }
 }
