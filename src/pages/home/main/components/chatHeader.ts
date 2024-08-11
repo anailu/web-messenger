@@ -63,7 +63,9 @@ class ChatHeader extends Block {
    * @return {string} - HTML разметка для компонента
    */
   render() {
-    const {avatar, title} = this.props; const avatarUrl = avatar ? `${BASE_URL}${avatar}` : defaultAvatar;
+    const {avatar, title} = this.props;
+
+    const avatarUrl = avatar ? `${BASE_URL}${avatar}` : defaultAvatar;
 
     return `
       <div class="chatHeader">
