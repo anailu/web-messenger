@@ -1,7 +1,9 @@
 import {expect} from 'chai';
 import sinon from 'sinon';
 import {HTTPTransport, METHOD} from './httpTransport';
-import {Response} from 'node-fetch';
+import fetch, {Response} from 'node-fetch';
+
+(globalThis as any).fetch = fetch;
 
 describe('HTTPTransport', () => {
   let http: HTTPTransport;
@@ -9,7 +11,7 @@ describe('HTTPTransport', () => {
 
   beforeEach(() => {
     http = new HTTPTransport('/test-path');
-    fetchStub = sinon.stub(globalThis, 'fetch');
+    fetchStub = sinon.stub(globalThis, 'fetch').callsFake(fetch as any);
   });
 
   afterEach(() => {
