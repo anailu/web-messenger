@@ -64,7 +64,7 @@ class ChatHeader extends Block {
    */
   render() {
     const {avatar, title} = this.props;
-    
+
     const avatarUrl = avatar ? `${BASE_URL}${avatar}` : defaultAvatar;
 
     return `
