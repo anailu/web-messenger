@@ -45,6 +45,12 @@ class ChatHeader extends Block {
     });
   }
 
+  /**
+   * Обновляет компоненты при изменении свойств.
+   * @param {ChatHeaderProps} oldProps - Старые свойства.
+   * @param {ChatHeaderProps} newProps - Новые свойства.
+   * @return {boolean} true, если компонент был обновлен, иначе false.
+   */
   componentDidUpdate(oldProps: ChatHeaderProps, newProps: ChatHeaderProps): boolean {
     if (oldProps.avatar !== newProps.avatar || oldProps.title !== newProps.title) {
       this.render();
@@ -63,8 +69,7 @@ class ChatHeader extends Block {
 
     return `
       <div class="chatHeader">
-        <img class="chatHeaderAvatar avatar_image" src="${avatarUrl}" alt="chat's avatar">
-        <div class="chatHeaderTitle">${title}</div>
+        <img class="chatHeaderAvatar avatar_image" src="${avatarUrl}" alt="chat's avatar"><div class="chatHeaderTitle">${title}</div>
       </div>
     `;
   }
@@ -78,4 +83,3 @@ const mapStateToProps = (state: {
 });
 
 export default connect(mapStateToProps)(ChatHeader);
-
