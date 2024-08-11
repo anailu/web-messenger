@@ -8,16 +8,16 @@ describe('HTTPTransport', () => {
 
   const mockFetch = (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
     const options = input instanceof Request ? input : init;
-    
-    const responseMock = { success: true };
-    const body = options?.method === 'GET' ? responseMock : 
+
+    const responseMock = {success: true};
+    const body = options?.method === 'GET' ? responseMock :
     (options?.body ? JSON.parse(options.body as string) : {});
-    
+
     const responseInit: ResponseInit = {
       status: 200,
       headers: {
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     };
 
     const response = new Response(JSON.stringify(body), responseInit);
