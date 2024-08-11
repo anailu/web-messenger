@@ -6,27 +6,20 @@ describe('HTTPTransport', () => {
   let http: HTTPTransport;
   let fetchStub: sinon.SinonStub;
 
-  const mockFetch = (input: string | URL | Request, init?: RequestInit): Promise<Response> => {
-    const options = input instanceof Request ? input : init;
-
-    const responseMock = {success: true};
-    const body = options?.method === 'GET' ? responseMock :
-    (options?.body ? JSON.parse(options.body as string) : {});
-
-    const responseInit: ResponseInit = {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-
-    const response = new Response(JSON.stringify(body), responseInit);
-    return Promise.resolve(response);
-  };
+  before(() => {
+    if (typeof globalThis.fetch === 'undefined') {
+      globalThis.fetch = async (): Promise<Response> => {
+        return new Response(JSON.stringify({}), {
+          status: 200,
+          headers: {'Content-Type': 'application/json'},
+        });
+      };
+    }
+  });
 
   beforeEach(() => {
     http = new HTTPTransport('/test-path');
-    fetchStub = sinon.stub(global, 'fetch').callsFake(mockFetch);
+    fetchStub = sinon.stub(global, 'fetch');
   });
 
   afterEach(() => {
