@@ -69,8 +69,7 @@ class ChatHeader extends Block {
 
     return `
       <div class="chatHeader">
-        <img class="chatHeaderAvatar avatar_image" src="${avatarUrl}" alt="chat's avatar">
-        <div class="chatHeaderTitle">${title}</div>
+        <img class="chatHeaderAvatar avatar_image" src="${avatarUrl}" alt="chat's avatar"><div class="chatHeaderTitle">${title}</div>
       </div>
     `;
   }
