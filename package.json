@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "prepare": "husky",
     "start": "npm run lint && npm run build && node server.js",
     "dev": "vite",
     "build": "vite build",
@@ -53,8 +52,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "echo 'Running pre-commit hook' && npm-run-all test lint:all",
-      "pre-push": "npm run other command"
+      "pre-commit": "npm-run-all test lint:all"
     }
   }
 }
