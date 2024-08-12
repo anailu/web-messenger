@@ -9,7 +9,7 @@ export const login = async (model: LoginRequestData) => {
     const currentUser = await authApi.me().catch(() => null);
 
     if (currentUser && !('reason' in currentUser) && currentUser.login !== model.login) {
-      throw new Error(`Already logged in as ${currentUser.login}. Please log out first.`);
+      throw new Error(`already logged in as ${currentUser.login}<br>please log out first`);
     }
 
     const loginResponse = await authApi.login(model);

@@ -1,5 +1,6 @@
 import {getChatWebSocket} from '../pages/home/main/api/chatWebSocketManager';
 import {sanitizeMessage} from './sanitize';
+import {UserDTO} from '../api/type';
 
 /**
  * Обработчик события отправки сообщения.
@@ -15,9 +16,14 @@ export function sendMessage(event: Event): void {
   message = sanitizeMessage(message);
 
   if (message) {
+    const currentState = window.store.getState();
+    const currentUser: UserDTO = currentState.user;
+
     const messageObject = {
       content: message,
       type: 'message',
+      user_id: currentUser.id,
+      time: new Date().toISOString(),
     };
 
     const chatWebSocket = getChatWebSocket();
