@@ -51,10 +51,5 @@
   },
   "engines": {
     "node": ">=18"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm-run-all test lint:all"
-    }
   }
 }
