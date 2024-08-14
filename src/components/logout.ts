@@ -34,7 +34,7 @@ class LogoutButton extends Block {
    */
   render() {
     return `
-        <button class="logout-button" style="color: white;">logout</button>
+      <button class="logout_button">logout</button>
     `;
   }
 }

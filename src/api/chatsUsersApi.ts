@@ -1,4 +1,4 @@
-import {HTTPTransport} from '../scripts/httpTransport';
+import {HTTPTransport} from './httpTransport';
 import {APIError} from './type';
 
 const chatsUsersApi = new HTTPTransport('/chats/users');

@@ -1,4 +1,4 @@
-import {HTTPTransport} from '../../../../scripts/httpTransport';
+import {HTTPTransport} from '../../../../api/httpTransport';
 import {
   APIError,
   CreateUser,
@@ -29,7 +29,7 @@ export default class AuthApi {
    * @return {Promise<void | APIError>} - Успешный ответ или ошибка, если вход не удался.
    * @throws {APIError} - В случае ошибки запроса.
    */
-  async login(data: LoginRequestData): Promise<void | APIError> {
+  async login(data: LoginRequestData): Promise<Response | APIError> {
     return authApi.post('/signin', {data});
   }
 

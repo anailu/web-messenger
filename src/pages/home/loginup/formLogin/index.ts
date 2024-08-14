@@ -107,7 +107,6 @@ class FormLogin extends Block {
         login: sanitizedData.login,
         password: sanitizedData.password,
       });
-      console.log('Login successful');
     } catch (error) {
       console.error('Login failed:', error);
     }

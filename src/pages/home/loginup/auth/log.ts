@@ -1,4 +1,4 @@
-import {LoginRequestData, UserDTO, APIError} from '../../../../api/type';
+import {LoginRequestData} from '../../../../api/type';
 import AuthApi from './auth-api';
 
 const authApi = new AuthApi();
@@ -6,21 +6,36 @@ const authApi = new AuthApi();
 export const login = async (model: LoginRequestData) => {
   window.store.set({isLoading: true});
   try {
-    await authApi.login(model);
+    const currentUser = await authApi.me().catch(() => null);
 
-    const userData: UserDTO | APIError = await authApi.me();
+    if (currentUser && !('reason' in currentUser) && currentUser.login !== model.login) {
+      throw new Error(`already logged in as ${currentUser.login}<br>please log out first`);
+    }
 
-    if ('message' in userData) {
-      throw new Error(userData.message);
+    const loginResponse = await authApi.login(model);
+
+    if (loginResponse && typeof loginResponse === 'object' && 'reason' in loginResponse) {
+      if (loginResponse.reason === 'User already in system') {
+        window.router.go('/messenger');
+        return;
+      } else {
+        throw new Error(loginResponse.reason || 'Login failed: Unknown error');
+      }
+    }
+
+    const userData = await authApi.me();
+
+    if ('reason' in userData) {
+      throw new Error(userData.reason);
     }
 
     window.store.set({user: userData});
-
-    console.log('Login successful:', userData);
-
     window.router.go('/messenger');
   } catch (error) {
-    window.store.set({loginError: 'Login failed'});
+    console.error(error);
+    window.store.set({
+      loginError: error instanceof Error ? error.message : 'Login failed',
+    });
   } finally {
     window.store.set({isLoading: false});
   }

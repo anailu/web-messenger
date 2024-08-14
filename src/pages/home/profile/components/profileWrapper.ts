@@ -5,6 +5,7 @@ import EditProfileForm from '../modals/editProfileForm';
 import EditButton from '../../../../components/linkButton';
 import avatar from '../../../../static/images/avatar.svg';
 import {User} from '../../../../api/type';
+import LogoutButton from '../../../../components/logout';
 
 const BASE_URL = 'https://ya-praktikum.tech/api/v2/resources/';
 
@@ -62,8 +63,12 @@ export default class ProfileWrapper extends Block {
       },
     });
 
+    const logoutButton = new LogoutButton({});
+
     this.children.editProfileModal = editProfileModal;
     this.children.editPasswordModal = editPasswordModal;
+
+    this.children.logoutButton = logoutButton;
   }
 
   /**
@@ -115,6 +120,7 @@ export default class ProfileWrapper extends Block {
         {{{editPasswordButton}}}
         {{{editProfileModal}}}
         {{{editPasswordModal}}}
+        {{{logoutButton}}}
       </div>
     `;
   }

@@ -25,7 +25,7 @@ class SmallModal extends Block {
           if (target.classList.contains('modal-button')) {
             props.onSubmit();
           }
-          if (target.classList.contains('modal-close')) {
+          if (target.classList.contains('modal')) {
             this.hide();
           }
         },
@@ -55,7 +55,6 @@ class SmallModal extends Block {
     return `
       <div class="modal">
         <div class="modal-content smallModal">
-        <span class="modal-close">&times;</span>
           <h2>${this.props.title}</h2>
           <div class="modal-body">
             ${this.props.content}

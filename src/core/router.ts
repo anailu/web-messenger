@@ -88,6 +88,10 @@ class Router {
    * Возвращает на предыдущий маршрут в истории.
    */
   back(): void {
+    window.addEventListener('popstate', () => this._onRoute(window.location.pathname), {
+      once: true,
+    });
+
     this.history.back();
   }
 
@@ -95,6 +99,10 @@ class Router {
    * Перенаправляет на следующий маршрут в истории.
    */
   forward(): void {
+    window.addEventListener('popstate', () => this._onRoute(window.location.pathname), {
+      once: true,
+    });
+
     this.history.forward();
   }
 

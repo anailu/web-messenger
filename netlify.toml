@@ -4,6 +4,6 @@
 
 [[redirects]]
   from = "/*"
-  to = "/src/pages/home/main/index.html"
+  to = "/index.html"
   status = 200
   

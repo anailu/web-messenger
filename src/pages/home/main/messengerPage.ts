@@ -1,10 +1,7 @@
 import Block from '../../../core/block';
-import UserCard from './components/user-card';
+import {UserCard, ChatTopBar, MessageContent, ChatBottomBar} from './components';
 import ListCard from './list-card';
 import {connect} from '../../../scripts/connect';
-import ChatTopBar from './components/chatTopBar';
-import MessageContent from './components/messageContent';
-import ChatBottomBar from './components/chatBottomBar';
 import {loadUserData} from '../profile/api/meApi';
 import {LastMessage} from '../../../api/type';
 
@@ -12,10 +9,10 @@ export interface Chat {
   id: number;
   title: string;
   avatar: string | null;
-  [key: string]: any;
-  unread_count: number,
-  last_message: LastMessage | null,
-  click: any
+  unread_count: number;
+  last_message: LastMessage | null;
+  click: () => void;
+  messages: [];
 }
 
 interface MessengerPageProps {
@@ -42,10 +39,8 @@ class MessengerPage extends Block {
    * @return {Promise<void>}
    */
   async componentDidMount(): Promise<void> {
-    console.log('ChatPage mounted with props:', this.props);
     try {
       await loadUserData();
-      console.log('User data loaded successfully');
     } catch (error) {
       console.error('Failed to load user data:', error);
     }
@@ -74,7 +69,11 @@ class MessengerPage extends Block {
     });
 
     const ChatBottomBarComp = new ChatBottomBar();
-    const MessageContentComp = new MessageContent({messages: [], userId: this.props.userId});
+
+    const MessageContentComp = new MessageContent({
+      messages: [],
+      userId: this.props.userId,
+    });
 
     this.children = {
       ListUser,
@@ -94,8 +93,6 @@ class MessengerPage extends Block {
     if (this.children.MessageContentComp) {
       const messages = props.selectChat?.messages || [];
 
-      console.log('updateMessageContent: Updating MessageContentComp with messages:', messages);
-
       this.children.MessageContentComp.setProps({
         messages,
         userId: props.userId,
@@ -111,11 +108,15 @@ class MessengerPage extends Block {
    * @param {function} handler - Обработчик клика на карточку.
    * @return {UserCard[]} Массив компонентов карточек пользователей.
    */
-  mapUserCardToComponent(userCard: Chat[], activeId: string | null, handler: (chat: Chat) => void) {
-    return userCard?.map(({title, logo, id}) =>
+  mapUserCardToComponent(
+      userCard: Chat[],
+      activeId: string | null,
+      handler: (chat: Chat) => void
+  ) {
+    return userCard?.map(({title, avatar, id}) =>
       new UserCard({
         title,
-        avatar: logo,
+        avatar: avatar,
         click: handler,
         id: Number(id),
         activeId: activeId !== null ? Number(activeId) : undefined,
@@ -129,7 +130,6 @@ class MessengerPage extends Block {
    * @return {boolean} true, если компонент был обновлен, иначе false.
    */
   componentDidUpdate(oldProps: MessengerPageProps, newProps: MessengerPageProps): boolean {
-    console.log('MessengerPage componentDidUpdate: oldProps', oldProps, 'newProps', newProps);
     const onCardClikBind = this.onCardClick.bind(this);
 
     if (oldProps.chats !== newProps.chats) {
@@ -139,18 +139,6 @@ class MessengerPage extends Block {
       });
     }
 
-    if (oldProps.selectChat?.id !== newProps.selectChat?.id) {
-      console.log('Updating selected chat components');
-      this.children.ChatTopBarComp.setProps({
-        avatar: newProps.selectChat?.avatar,
-        title: newProps.selectChat?.title,
-        chatId: newProps.selectChat?.id,
-      });
-
-      this.updateMessageContent(newProps);
-    }
-
-    console.log('componentDidUpdate props:', this.props);
     return true;
   }
 

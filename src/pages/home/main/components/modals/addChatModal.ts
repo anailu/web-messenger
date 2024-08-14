@@ -23,7 +23,7 @@ class AddChatModal extends Block {
             const input = this.element?.querySelector('.chatTitle_input') as HTMLInputElement;
             props.onSubmit(input.value);
           }
-          if (target.classList.contains('modal-close')) {
+          if (target.classList.contains('modal')) {
             this.hide();
           }
         },
@@ -39,7 +39,6 @@ class AddChatModal extends Block {
     return `
       <div class="modal" style="display: none;">
         <div class="modal-content smallModal">
-          <span class="modal-close">&times;</span>
           <h2>create chat</h2>
           <input type="text" class="chatTitle_input" placeholder="enter chat title"/>
           <button class="modal-submit">create</button>

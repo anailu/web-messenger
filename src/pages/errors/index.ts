@@ -32,7 +32,7 @@ class ErrorBlock extends Block {
       label: 'back to main',
       type: 'link',
       onClick: () => {
-        window.router.go('/');
+        window.router.go('/messenger');
       },
     });
 
